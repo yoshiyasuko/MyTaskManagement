@@ -12,6 +12,7 @@ import java.util.Date
 
 // 課題
 data class Task(
+    var id: Int,
     var title: String,
     var color: Color,
     var subTasks: List<SubTask> = emptyList(),
@@ -66,6 +67,7 @@ enum class SubTaskStatus {
 fun makeDummyTasks(): List<Task> {
     return listOf(
         Task(
+            id = 0,
             title = "課題1",
             color = Color(0xfff8dc6c),
             subTasks = listOf(
@@ -85,6 +87,7 @@ fun makeDummyTasks(): List<Task> {
             deadline = Date()
         ),
         Task(
+            id = 1,
             title = "課題2",
             color = Color(0xfff86e6c),
             subTasks = listOf(
@@ -108,6 +111,7 @@ fun makeDummyTasks(): List<Task> {
             deadline = Date()
         ),
         Task(
+            id = 2,
             title = "課題3",
             color = Color(0xff6cbef8),
             subTasks = listOf(
@@ -129,306 +133,7 @@ fun makeDummyTasks(): List<Task> {
                 ),
             ),
             deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
+        )
     )
 }
 

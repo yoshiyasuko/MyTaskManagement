@@ -4,36 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.dashimaki_dofu.mytaskmanagement.model.Task
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTasks
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.dashimaki_dofu.mytaskmanagement.NavLinks
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.MyTaskManagementTheme
-import com.dashimaki_dofu.mytaskmanagement.view.TaskListRow
+import com.dashimaki_dofu.mytaskmanagement.view.composable.screen.TaskDetailScreen
+import com.dashimaki_dofu.mytaskmanagement.view.composable.screen.TaskListScreen
 import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
 
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
@@ -44,52 +29,39 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyTaskManagementTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = NavLinks.TaskList.route,
                 ) {
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text("課題")
-                                },
-                                colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    titleContentColor = MaterialTheme.colorScheme.primary
-                                )
-                            )
+                    // 課題一覧画面
+                    composable(
+                        route = NavLinks.TaskList.route
+                    ) {
+                        TaskListScreen(tasks = viewModel.tasks, onClickItem = { taskId ->
+                            navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
+                        })
+                    }
+
+                    // 課題詳細画面
+                    composable(
+                        route = NavLinks.TaskDetail.route,
+                        arguments = listOf(
+                            navArgument(NavLinks.TaskDetail.ARGUMENT_ID) {
+                                type = NavType.IntType
+                            }
+                        )
+                    ) { backStackEntry ->
+                        val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskDetail.ARGUMENT_ID) ?: -1
+                        val task = viewModel.tasks.first {
+                            it.id == taskId
                         }
-                    ) { innerPadding ->
-                        Box(modifier = Modifier.padding(innerPadding)) {
-                            TaskList(viewModel.tasks)
-                        }
+                        TaskDetailScreen(task = task, onClickNavigationIcon = {
+                            navController.navigateUp()
+                        })
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun TaskList(tasks: List<Task>) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(all = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(tasks) { task ->
-            TaskListRow(task = task)
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(4.dp))
-        }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun TaskListPreview() {
-    TaskList(makeDummyTasks())
 }

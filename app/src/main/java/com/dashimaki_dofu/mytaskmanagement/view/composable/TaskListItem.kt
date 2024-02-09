@@ -1,6 +1,7 @@
-package com.dashimaki_dofu.mytaskmanagement.view
+package com.dashimaki_dofu.mytaskmanagement.view.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,25 +34,25 @@ import java.util.Date
 
 
 /**
- * TaskListRow
+ * TaskListItem
  *
  * Created by Yoshiyasu on 2024/02/05
  */
 
 @Composable
-fun TaskListRow(task: Task) {
+fun TaskListItem(task: Task, onClick: (id: Int) -> Unit) {
     Box(
         modifier = Modifier
+            .clickable {
+                onClick(task.id)
+            }
             .height(60.dp)
             .shadow(
                 elevation = 6.dp,
                 shape = RoundedCornerShape(8.dp)
             )
-            .background(
-                task.color
-                    .copy(alpha = 0.3f)
-                    .compositeOver(Color.White)
-            )
+            .background(task.color.copy(alpha = 0.3f).compositeOver(Color.White))
+
         ,
         contentAlignment = Alignment.Center,
     ) {
@@ -118,13 +119,15 @@ fun TaskListRow(task: Task) {
 
 @Preview(showBackground = true)
 @Composable
-fun TaskListRowSample() {
-    TaskListRow(
+fun TaskListItemPreview() {
+    TaskListItem(
         task = Task(
+            id = 0,
             title = "世界観",
             color = colorResource(id = R.color.taskColor1),
             subTasks = makeDummySubTasks(),
             deadline = Date()
-        )
+        ),
+        onClick = { }
     )
 }
