@@ -27,7 +27,10 @@ fun TaskList(tasks: List<Task>, onClickItem: (id: Int) -> Unit) {
             .padding(all = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(tasks) { task ->
+        items(
+            tasks,
+            key = { task -> task.id }
+        ) { task ->
             TaskListItem(task = task, onClick = onClickItem)
         }
 
