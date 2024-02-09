@@ -54,6 +54,7 @@ data class Task(
 
 // 子課題
 data class SubTask(
+    var id: Int,
     var title: String = "",
     var status: SubTaskStatus = SubTaskStatus.INCOMPLETE
 )
@@ -64,84 +65,46 @@ enum class SubTaskStatus {
     COMPLETED,  // 完了
 }
 
-fun makeDummyTasks(): List<Task> {
-    return listOf(
+// ダミーの課題リスト: デバッグ用
+fun makeDummyTasks(numberOfTask: Int = 20): List<Task> {
+    return (0..<numberOfTask).map {
         Task(
-            id = 0,
-            title = "課題1",
-            color = Color(0xfff8dc6c),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題1の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題1の子課題2",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題1の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            id = 1,
-            title = "課題2",
-            color = Color(0xfff86e6c),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題2の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題2の子課題2",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題2の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題2の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
-            deadline = Date()
-        ),
-        Task(
-            id = 2,
-            title = "課題3",
-            color = Color(0xff6cbef8),
-            subTasks = listOf(
-                SubTask(
-                    title = "課題3の子課題1",
-                    status = SubTaskStatus.INCOMPLETE
-                ),
-                SubTask(
-                    title = "課題3の子課題2",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題3",
-                    status = SubTaskStatus.COMPLETED
-                ),
-                SubTask(
-                    title = "課題3の子課題4",
-                    status = SubTaskStatus.COMPLETED
-                ),
-            ),
+            id = it,
+            title = "課題${it + 1}",
+            color = when (it % 3) {
+                0 -> Color(0xfff8dc6c)
+                1 -> Color(0xfff86e6c)
+                else -> Color(0xff6cbef8)
+            },
+            subTasks = makeDummySubTasks(it),
             deadline = Date()
         )
-    )
+    }
 }
 
-// ダミーの小課題リスト: デバッグ用
-fun makeDummySubTasks(): List<SubTask> {
-    return (0..<5).map {
+// ダミーの子課題リスト: デバッグ用
+fun makeDummySubTasks(taskId: Int = 0): List<SubTask> {
+    return (0..<7).map {
         SubTask(
-            title = "サブタスク$it",
-            status = if (it % 2 == 1) SubTaskStatus.COMPLETED else SubTaskStatus.INCOMPLETE)
+            id = it,
+            title = "課題${taskId + 1}の子課題$it",
+            status = when (taskId % 3) {
+                0 -> when (it) {
+                    1 -> SubTaskStatus.COMPLETED
+                    2 -> SubTaskStatus.ACTIVE
+                    else -> SubTaskStatus.INCOMPLETE
+                }
+                1 -> when (it) {
+                    in 0..2 -> SubTaskStatus.COMPLETED
+                    3 -> SubTaskStatus.ACTIVE
+                    else -> SubTaskStatus.INCOMPLETE
+                }
+                else -> when (it) {
+                    in 0..4 -> SubTaskStatus.COMPLETED
+                    5 -> SubTaskStatus.ACTIVE
+                    else -> SubTaskStatus.INCOMPLETE
+                }
+            }
+        )
     }
 }
