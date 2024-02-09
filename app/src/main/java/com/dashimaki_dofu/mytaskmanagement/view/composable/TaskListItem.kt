@@ -1,4 +1,4 @@
-package com.dashimaki_dofu.mytaskmanagement.view
+package com.dashimaki_dofu.mytaskmanagement.view.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,13 +33,13 @@ import java.util.Date
 
 
 /**
- * TaskListRow
+ * TaskListItem
  *
  * Created by Yoshiyasu on 2024/02/05
  */
 
 @Composable
-fun TaskListRow(task: Task) {
+fun TaskListItem(task: Task) {
     Box(
         modifier = Modifier
             .height(60.dp)
@@ -118,8 +118,8 @@ fun TaskListRow(task: Task) {
 
 @Preview(showBackground = true)
 @Composable
-fun TaskListRowSample() {
-    TaskListRow(
+fun TaskListItemSample() {
+    TaskListItem(
         task = Task(
             title = "世界観",
             color = colorResource(id = R.color.taskColor1),
