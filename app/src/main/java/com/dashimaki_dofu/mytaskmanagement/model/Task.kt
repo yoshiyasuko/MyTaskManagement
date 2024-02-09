@@ -54,6 +54,7 @@ data class Task(
 
 // 子課題
 data class SubTask(
+    var id: Int,
     var title: String = "",
     var status: SubTaskStatus = SubTaskStatus.INCOMPLETE
 )
