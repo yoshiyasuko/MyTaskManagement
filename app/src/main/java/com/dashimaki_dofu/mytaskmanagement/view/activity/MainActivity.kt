@@ -33,6 +33,7 @@ import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
@@ -42,44 +43,26 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            MainScreen(viewModel.tasks)
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MainScreen(tasks: List<Task>) {
-    MyTaskManagementTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text("課題一覧")
-                        },
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            titleContentColor = MaterialTheme.colorScheme.primary
-                        )
-                    )
-                }
-            ) {
-                Box(modifier = Modifier.padding(it)) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(all = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        items(tasks) { task ->
-                            TaskListRow(task = task)
+            MyTaskManagementTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Scaffold(
+                        topBar = {
+                            TopAppBar(
+                                title = {
+                                    Text("課題")
+                                },
+                                colors = TopAppBarDefaults.topAppBarColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    titleContentColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
                         }
-
-                        item {
-                            Spacer(modifier = Modifier.height(4.dp))
+                    ) { innerPadding ->
+                        Box(modifier = Modifier.padding(innerPadding)) {
+                            TaskList(viewModel.tasks)
                         }
                     }
                 }
@@ -88,8 +71,25 @@ fun MainScreen(tasks: List<Task>) {
     }
 }
 
+@Composable
+fun TaskList(tasks: List<Task>) {
+    LazyColumn(
+        modifier = Modifier
+            .padding(all = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(tasks) { task ->
+            TaskListRow(task = task)
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+    }
+}
+
 @Preview(showSystemUi = true)
 @Composable
-fun MainScreenPreview() {
-    MainScreen(makeDummyTasks())
+fun TaskListPreview() {
+    TaskList(makeDummyTasks())
 }
