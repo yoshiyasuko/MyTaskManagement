@@ -1,0 +1,23 @@
+{
+  "name": "mytaskmanagement",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "commit": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yoshiyasuko/MyTaskManagement.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yoshiyasuko/MyTaskManagement/issues"
+  },
+  "homepage": "https://github.com/yoshiyasuko/MyTaskManagement#readme",
+  "dependencies": {
+    "git-cz": "^4.9.0"
+  }
+}
