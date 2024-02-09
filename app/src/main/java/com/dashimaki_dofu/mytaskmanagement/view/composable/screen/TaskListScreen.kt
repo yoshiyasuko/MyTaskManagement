@@ -26,7 +26,7 @@ import com.dashimaki_dofu.mytaskmanagement.view.composable.TaskList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskListScreen(tasks: List<Task>) {
+fun TaskListScreen(tasks: List<Task>, onClickItem: (id: Int) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -45,7 +45,7 @@ fun TaskListScreen(tasks: List<Task>) {
             }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                TaskList(tasks)
+                TaskList(tasks = tasks, onClickItem = onClickItem)
             }
         }
     }
@@ -54,5 +54,5 @@ fun TaskListScreen(tasks: List<Task>) {
 @Preview(showBackground = true)
 @Composable
 fun TaskListScreenPreview() {
-    TaskListScreen(tasks = makeDummyTasks())
+    TaskListScreen(tasks = makeDummyTasks(), onClickItem = {})
 }

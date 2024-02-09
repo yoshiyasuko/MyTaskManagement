@@ -21,14 +21,14 @@ import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTasks
  */
 
 @Composable
-fun TaskList(tasks: List<Task>) {
+fun TaskList(tasks: List<Task>, onClickItem: (id: Int) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .padding(all = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(tasks) { task ->
-            TaskListItem(task = task)
+            TaskListItem(task = task, onClick = onClickItem)
         }
 
         item {
@@ -40,5 +40,5 @@ fun TaskList(tasks: List<Task>) {
 @Preview(showSystemUi = true)
 @Composable
 fun TaskListPreview() {
-    TaskList(makeDummyTasks())
+    TaskList(makeDummyTasks(), onClickItem = { })
 }
