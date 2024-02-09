@@ -50,8 +50,10 @@ fun TaskListItem(task: Task, onClick: (id: Int) -> Unit) {
                 elevation = 6.dp,
                 shape = RoundedCornerShape(8.dp)
             )
-            .background(task.color.copy(alpha = 0.3f).compositeOver(Color.White))
-
+            .background(
+                task.color.copy(alpha = 0.3f)
+                    .compositeOver(Color.White)
+            )
         ,
         contentAlignment = Alignment.Center,
     ) {
