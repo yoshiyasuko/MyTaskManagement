@@ -119,7 +119,7 @@ fun TaskListItem(task: Task, onClick: (id: Int) -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun TaskListItemSample() {
+fun TaskListItemPreview() {
     TaskListItem(
         task = Task(
             id = 0,
