@@ -29,8 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.model.Task
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
-import java.util.Date
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTasks
 
 
 /**
@@ -121,13 +120,7 @@ fun TaskListItem(task: Task, onClick: (id: Int) -> Unit) {
 @Composable
 fun TaskListItemPreview() {
     TaskListItem(
-        task = Task(
-            id = 0,
-            title = "世界観",
-            color = colorResource(id = R.color.taskColor1),
-            subTasks = makeDummySubTasks(),
-            deadline = Date()
-        ),
+        task = makeDummyTasks().first(),
         onClick = { }
     )
 }
