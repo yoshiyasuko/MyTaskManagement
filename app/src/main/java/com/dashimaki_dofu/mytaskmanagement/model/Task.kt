@@ -7,6 +7,7 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.core.graphics.toColor
+import com.dashimaki_dofu.mytaskmanagement.R
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -57,7 +58,16 @@ data class SubTask(
     var id: Int,
     var title: String = "",
     var status: SubTaskStatus = SubTaskStatus.INCOMPLETE
-)
+) {
+    val stampResourceId: Int?
+        get() {
+            return when (status) {
+                SubTaskStatus.INCOMPLETE -> R.drawable.mark_incomplete_checked
+                SubTaskStatus.COMPLETED -> R.drawable.mark_sumi_checked
+                else -> null
+            }
+        }
+}
 
 enum class SubTaskStatus {
     INCOMPLETE, // 未着手
