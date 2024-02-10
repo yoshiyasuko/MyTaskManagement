@@ -38,9 +38,12 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = NavLinks.TaskList.route
                     ) {
-                        TaskListScreen(tasks = viewModel.tasks, onClickItem = { taskId ->
-                            navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
-                        })
+                        TaskListScreen(
+                            allTaskAndSubTasks = viewModel.taskAndSubTasks,
+                            onClickItem = { taskId ->
+                                navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
+                            }
+                        )
                     }
 
                     // 課題詳細画面
@@ -53,10 +56,10 @@ class MainActivity : ComponentActivity() {
                         )
                     ) { backStackEntry ->
                         val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskDetail.ARGUMENT_ID) ?: -1
-                        val task = viewModel.tasks.first {
-                            it.id == taskId
+                        val task = viewModel.taskAndSubTasks.first {
+                            it.task.id == taskId
                         }
-                        TaskDetailScreen(task = task, onClickNavigationIcon = {
+                        TaskDetailScreen(taskAndSubTasks = task, onClickNavigationIcon = {
                             navController.navigateUp()
                         })
                     }
