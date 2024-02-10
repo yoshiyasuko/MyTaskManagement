@@ -42,9 +42,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
-import com.dashimaki_dofu.mytaskmanagement.model.Task
+import com.dashimaki_dofu.mytaskmanagement.model.TaskAndSubTasks
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTasks
 
 
 /**
@@ -55,7 +55,7 @@ import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTasks
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
+fun TaskDetailScreen(taskAndSubTasks: TaskAndSubTasks, onClickNavigationIcon: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -64,7 +64,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(task.title)
+                        Text(taskAndSubTasks.task.title)
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -92,7 +92,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
                             shape = RoundedCornerShape(8.dp)
                         )
                         .background(
-                            task.color
+                            taskAndSubTasks.task.color
                                 .copy(alpha = 0.3f)
                                 .compositeOver(Color.White)
                         )
@@ -105,7 +105,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
                     ) {
                         Row {
                             Text(
-                                text = "締切: ${task.formattedDeadLineString}",
+                                text = "締切: ${taskAndSubTasks.task.formattedDeadLineString}",
                                 color = Color.Red,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp
@@ -117,7 +117,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
                                 .height(60.dp)
                                 .border(
                                     width = 4.dp,
-                                    color = task.color,
+                                    color = taskAndSubTasks.task.color,
                                     shape = RoundedCornerShape(12.dp)
                                 )
                                 .fillMaxWidth()
@@ -126,7 +126,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
 
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth(task.progressRate)
+                                    .fillMaxWidth(taskAndSubTasks.progressRate)
                                     .fillMaxHeight()
                                     .border(
                                         width = 0.dp,
@@ -137,7 +137,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
                                         )
                                     )
                                     .background(
-                                        color = task.color,
+                                        color = taskAndSubTasks.task.color,
                                         shape = RoundedCornerShape(
                                             topStart = 12.dp,
                                             bottomStart = 12.dp
@@ -146,7 +146,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
                                     .constrainAs(progressBarRef) {}
                             )
                             Text(
-                                text = "${(task.progressRate * 100).toInt()}%",
+                                text = "${(taskAndSubTasks.progressRate * 100).toInt()}%",
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colorResource(id = R.color.lightGray1),
@@ -159,7 +159,7 @@ fun TaskDetailScreen(task: Task, onClickNavigationIcon: () -> Unit) {
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumn {
-                            items(task.subTasks) { subTask ->
+                            items(taskAndSubTasks.subTasks) { subTask ->
                                 SubTaskListItem(subTask = subTask)
                             }
                         }
@@ -209,7 +209,10 @@ fun SubTaskListItem(subTask: SubTask) {
 @Preview(showBackground = true)
 @Composable
 fun TaskDetailScreenPreview() {
-    TaskDetailScreen(task = makeDummyTasks().first(), onClickNavigationIcon = {})
+    TaskDetailScreen(
+        taskAndSubTasks = makeDummyAllTaskAndSubTasks().first(),
+        onClickNavigationIcon = {}
+    )
 }
 
 @Preview(showBackground = true)
