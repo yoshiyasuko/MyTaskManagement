@@ -9,20 +9,20 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.Task
-import com.dashimaki_dofu.mytaskmanagement.model.TaskAndSubTasks
+import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 
 
 /**
- * TaskDao
+ * TaskSubjectDao
  *
  * Created by Yoshiyasu on 2024/02/10
  */
 
 @Dao
-interface TaskDao {
+interface TaskSubjectDao {
     @Transaction
     @Query("select * from tasks")
-    suspend fun getAllTaskAndSubTasks(): List<TaskAndSubTasks>
+    suspend fun getAllTaskSubjects(): List<TaskSubject>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(task: Task)

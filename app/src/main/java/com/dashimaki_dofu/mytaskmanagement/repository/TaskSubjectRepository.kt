@@ -1,19 +1,19 @@
 package com.dashimaki_dofu.mytaskmanagement.repository
 
-import com.dashimaki_dofu.mytaskmanagement.database.TaskDao
+import com.dashimaki_dofu.mytaskmanagement.database.TaskSubjectDao
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.Task
-import com.dashimaki_dofu.mytaskmanagement.model.TaskAndSubTasks
+import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 
 
 /**
- * TaskRepository
+ * TaskSubjectRepository
  *
  * Created by Yoshiyasu on 2024/02/10
  */
 
-interface TaskRepository {
-    suspend fun getAllTaskAndSubTasks(): List<TaskAndSubTasks>
+interface TaskSubjectRepository {
+    suspend fun getAllTaskSubjects(): List<TaskSubject>
     suspend fun createTask(task: Task)
     suspend fun updateTask(task: Task)
     suspend fun deleteTask(task: Task)
@@ -22,32 +22,34 @@ interface TaskRepository {
     suspend fun deleteSubTask(subTask: SubTask)
 }
 
-class TaskRepositoryImpl(private val taskDao: TaskDao) : TaskRepository {
-    override suspend fun getAllTaskAndSubTasks(): List<TaskAndSubTasks> {
-        return taskDao.getAllTaskAndSubTasks()
+class TaskSubjectRepositoryImpl(
+    private val taskSubjectDao: TaskSubjectDao
+) : TaskSubjectRepository {
+    override suspend fun getAllTaskSubjects(): List<TaskSubject> {
+        return taskSubjectDao.getAllTaskSubjects()
     }
 
     override suspend fun createTask(task: Task) {
-        taskDao.insertTask(task)
+        taskSubjectDao.insertTask(task)
     }
 
     override suspend fun updateTask(task: Task) {
-        taskDao.updateTask(task)
+        taskSubjectDao.updateTask(task)
     }
 
     override suspend fun deleteTask(task: Task) {
-        taskDao.deleteTask(task)
+        taskSubjectDao.deleteTask(task)
     }
 
     override suspend fun createSubTask(subTask: SubTask) {
-        taskDao.insertSubTask(subTask)
+        taskSubjectDao.insertSubTask(subTask)
     }
 
     override suspend fun updateSubTask(subTask: SubTask) {
-        taskDao.updateSubTask(subTask)
+        taskSubjectDao.updateSubTask(subTask)
     }
 
     override suspend fun deleteSubTask(subTask: SubTask) {
-        taskDao.deleteSubTask(subTask)
+        taskSubjectDao.deleteSubTask(subTask)
     }
 }

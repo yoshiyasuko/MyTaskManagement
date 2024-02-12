@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                         route = NavLinks.TaskList.route
                     ) {
                         TaskListScreen(
-                            allTaskAndSubTasks = viewModel.taskAndSubTasks,
+                            taskSubjects = viewModel.taskSubjects,
                             onClickItem = { taskId ->
                                 navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
                             }
@@ -56,10 +56,10 @@ class MainActivity : ComponentActivity() {
                         )
                     ) { backStackEntry ->
                         val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskDetail.ARGUMENT_ID) ?: -1
-                        val task = viewModel.taskAndSubTasks.first {
+                        val task = viewModel.taskSubjects.first {
                             it.task.id == taskId
                         }
-                        TaskDetailScreen(taskAndSubTasks = task, onClickNavigationIcon = {
+                        TaskDetailScreen(taskSubject = task, onClickNavigationIcon = {
                             navController.navigateUp()
                         })
                     }

@@ -10,8 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dashimaki_dofu.mytaskmanagement.model.TaskAndSubTasks
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
+import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 
 
 /**
@@ -21,17 +21,17 @@ import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
  */
 
 @Composable
-fun TaskList(allTaskAndSubTasks: List<TaskAndSubTasks>, onClickItem: (id: Int) -> Unit) {
+fun TaskList(taskSubjects: List<TaskSubject>, onClickItem: (id: Int) -> Unit) {
     LazyColumn(
         modifier = Modifier
             .padding(all = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(
-            allTaskAndSubTasks,
-            key = { taskAndSubTasks -> taskAndSubTasks.task.id }
+            taskSubjects,
+            key = { taskSubject -> taskSubject.task.id }
         ) { task ->
-            TaskListItem(taskAndSubTasks = task, onClick = onClickItem)
+            TaskListItem(taskSubject = task, onClick = onClickItem)
         }
 
         item {
@@ -43,5 +43,5 @@ fun TaskList(allTaskAndSubTasks: List<TaskAndSubTasks>, onClickItem: (id: Int) -
 @Preview(showSystemUi = true)
 @Composable
 fun TaskListPreview() {
-    TaskList(makeDummyAllTaskAndSubTasks(), onClickItem = { })
+    TaskList(makeDummyTaskSubjects(), onClickItem = { })
 }
