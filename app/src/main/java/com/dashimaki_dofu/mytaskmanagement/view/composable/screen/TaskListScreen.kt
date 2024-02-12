@@ -13,8 +13,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.view.composable.TaskList
 
 

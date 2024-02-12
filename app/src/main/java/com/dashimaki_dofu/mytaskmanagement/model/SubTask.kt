@@ -46,31 +46,3 @@ enum class SubTaskStatus {
     ACTIVE,     // 着手中
     COMPLETED,  // 完了
 }
-
-// ダミーの子課題リスト: デバッグ用
-fun makeDummySubTasks(taskId: Int = 0): List<SubTask> {
-    return (0..<10).map {
-        SubTask(
-            id = it,
-            taskId = taskId,
-            title = "課題${taskId + 1}の子課題${it + 1}",
-            status = when (taskId % 3) {
-                0 -> when (it) {
-                    in 0..1 -> SubTaskStatus.COMPLETED
-                    2 -> SubTaskStatus.ACTIVE
-                    else -> SubTaskStatus.INCOMPLETE
-                }
-                1 -> when (it) {
-                    in 0..2 -> SubTaskStatus.COMPLETED
-                    3 -> SubTaskStatus.ACTIVE
-                    else -> SubTaskStatus.INCOMPLETE
-                }
-                else -> when (it) {
-                    in 0..4 -> SubTaskStatus.COMPLETED
-                    5 -> SubTaskStatus.ACTIVE
-                    else -> SubTaskStatus.INCOMPLETE
-                }
-            }
-        )
-    }
-}

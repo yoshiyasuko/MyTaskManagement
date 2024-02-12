@@ -51,21 +51,3 @@ data class Task(
             return Color(ColorUtils.HSLToColor(hsl).toColor().toArgb())
         }
 }
-
-// ダミーの課題リスト: デバッグ用
-fun makeDummyTasks(numberOfTask: Int = 20): List<Task> {
-    return (0..<numberOfTask).map { makeDummyTask(it) }
-}
-
-fun makeDummyTask(taskId: Int): Task {
-    return Task(
-        id = taskId,
-        title = "課題${taskId + 1}",
-        colorValue = when (taskId % 3) {
-            0 -> 0xfff8dc6c
-            1 -> 0xfff86e6c
-            else -> 0xff6cbef8
-        },
-        deadline = Date()
-    )
-}

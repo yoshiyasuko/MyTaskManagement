@@ -42,9 +42,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 
 
 /**
