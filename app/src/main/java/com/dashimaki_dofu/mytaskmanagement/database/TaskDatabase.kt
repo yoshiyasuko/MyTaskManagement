@@ -26,5 +26,5 @@ abstract class TaskDatabase : RoomDatabase() {
     companion object {
         const val DATABASE_NAME = "tasks"
     }
-    abstract fun taskDao(): TaskDao
+    abstract fun taskSubjectDao(): TaskSubjectDao
 }

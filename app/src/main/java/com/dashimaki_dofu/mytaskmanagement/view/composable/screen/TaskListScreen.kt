@@ -13,8 +13,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.dashimaki_dofu.mytaskmanagement.model.TaskAndSubTasks
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
+import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.view.composable.TaskList
 
 
@@ -26,7 +26,7 @@ import com.dashimaki_dofu.mytaskmanagement.view.composable.TaskList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskListScreen(allTaskAndSubTasks: List<TaskAndSubTasks>, onClickItem: (id: Int) -> Unit) {
+fun TaskListScreen(taskSubjects: List<TaskSubject>, onClickItem: (id: Int) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -45,7 +45,7 @@ fun TaskListScreen(allTaskAndSubTasks: List<TaskAndSubTasks>, onClickItem: (id: 
             }
         ) { innerPadding ->
             Box(modifier = Modifier.padding(innerPadding)) {
-                TaskList(allTaskAndSubTasks = allTaskAndSubTasks, onClickItem = onClickItem)
+                TaskList(taskSubjects = taskSubjects, onClickItem = onClickItem)
             }
         }
     }
@@ -54,5 +54,5 @@ fun TaskListScreen(allTaskAndSubTasks: List<TaskAndSubTasks>, onClickItem: (id: 
 @Preview(showBackground = true)
 @Composable
 fun TaskListScreenPreview() {
-    TaskListScreen(allTaskAndSubTasks = makeDummyAllTaskAndSubTasks(), onClickItem = {})
+    TaskListScreen(taskSubjects = makeDummyTaskSubjects(), onClickItem = {})
 }

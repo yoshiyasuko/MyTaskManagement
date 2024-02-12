@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.dashimaki_dofu.mytaskmanagement.R
-import com.dashimaki_dofu.mytaskmanagement.model.TaskAndSubTasks
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
+import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 
 
 /**
@@ -39,11 +39,11 @@ import com.dashimaki_dofu.mytaskmanagement.model.makeDummyAllTaskAndSubTasks
  */
 
 @Composable
-fun TaskListItem(taskAndSubTasks: TaskAndSubTasks, onClick: (id: Int) -> Unit) {
+fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
     Box(
         modifier = Modifier
             .clickable {
-                onClick(taskAndSubTasks.task.id)
+                onClick(taskSubject.task.id)
             }
             .height(60.dp)
             .shadow(
@@ -51,7 +51,7 @@ fun TaskListItem(taskAndSubTasks: TaskAndSubTasks, onClick: (id: Int) -> Unit) {
                 shape = RoundedCornerShape(8.dp)
             )
             .background(
-                taskAndSubTasks.task.color.copy(alpha = 0.3f)
+                taskSubject.task.color.copy(alpha = 0.3f)
                     .compositeOver(Color.White)
             )
         ,
@@ -63,8 +63,8 @@ fun TaskListItem(taskAndSubTasks: TaskAndSubTasks, onClick: (id: Int) -> Unit) {
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .background(taskAndSubTasks.task.color)
-                    .fillMaxWidth(taskAndSubTasks.progressRate)
+                    .background(taskSubject.task.color)
+                    .fillMaxWidth(taskSubject.progressRate)
                     .constrainAs(progressBarRef) {}
             )
             Box(
@@ -81,9 +81,9 @@ fun TaskListItem(taskAndSubTasks: TaskAndSubTasks, onClick: (id: Int) -> Unit) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Spacer(modifier = Modifier.width(40.dp))
                         Text(
-                            text = taskAndSubTasks.task.title,
+                            text = taskSubject.task.title,
                             fontSize = 24.sp,
-                            color = taskAndSubTasks.task.listTitleColor
+                            color = taskSubject.task.listTitleColor
                         )
                     }
                     Column(
@@ -96,7 +96,7 @@ fun TaskListItem(taskAndSubTasks: TaskAndSubTasks, onClick: (id: Int) -> Unit) {
                         )
                         Text(
                             textAlign = TextAlign.Center,
-                            text = taskAndSubTasks.task.formattedDeadLineString,
+                            text = taskSubject.task.formattedDeadLineString,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Red
@@ -105,7 +105,7 @@ fun TaskListItem(taskAndSubTasks: TaskAndSubTasks, onClick: (id: Int) -> Unit) {
                 }
             }
             Text(
-                text = "${(taskAndSubTasks.progressRate * 100).toInt()}%",
+                text = "${(taskSubject.progressRate * 100).toInt()}%",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(id = R.color.lightGray1),
@@ -122,7 +122,7 @@ fun TaskListItem(taskAndSubTasks: TaskAndSubTasks, onClick: (id: Int) -> Unit) {
 @Composable
 fun TaskListItemPreview() {
     TaskListItem(
-        taskAndSubTasks = makeDummyAllTaskAndSubTasks().first(),
+        taskSubject = makeDummyTaskSubjects().first(),
         onClick = { }
     )
 }
