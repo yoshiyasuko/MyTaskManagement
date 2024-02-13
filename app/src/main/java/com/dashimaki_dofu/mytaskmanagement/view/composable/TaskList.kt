@@ -46,5 +46,5 @@ fun TaskList(
 @Preview(showSystemUi = true)
 @Composable
 fun TaskListPreview() {
-    TaskList((makeDummyTaskSubjects()), onClickItem = { })
+    TaskList(makeDummyTaskSubjects(), onClickItem = { })
 }
