@@ -2,6 +2,7 @@ package com.dashimaki_dofu.mytaskmanagement.view.composable.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -12,6 +13,8 @@ import com.dashimaki_dofu.mytaskmanagement.NavLinks
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.MyTaskManagementTheme
 import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel
 
 
 /**
@@ -21,7 +24,7 @@ import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
  */
 
 @Composable
-fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
+fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
     MyTaskManagementTheme {
         val navController = rememberNavController()
         NavHost(
@@ -32,8 +35,9 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
             composable(
                 route = NavLinks.TaskList.route
             ) {
+                val viewModel = hiltViewModel<TaskListViewModel>()
                 TaskListScreen(
-                    taskSubjects = mainViewModel.taskSubjects,
+                    taskListViewModel = viewModel,
                     onClickItem = { taskId ->
                         navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
                     }
@@ -49,17 +53,15 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                     }
                 )
             ) { backStackEntry ->
+                val viewModel = hiltViewModel<TaskDetailViewModel>()
                 val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskDetail.ARGUMENT_ID) ?: -1
-                mainViewModel.taskSubjects.firstOrNull {
-                    it.task.id == taskId
-                }?.let {
-                    TaskDetailScreen(
-                        taskSubject = it,
-                        onClickNavigationIcon = {
-                            navController.navigateUp()
-                        }
-                    )
-                }
+                viewModel.setTaskId(taskId)
+                TaskDetailScreen(
+                    taskDetailViewModel = viewModel,
+                    onClickNavigationIcon = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
     }
@@ -67,8 +69,8 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
 
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreview() {
+fun MyTaskManagementAppPreview() {
     val mainViewModel = MainViewModel()
     mainViewModel.taskSubjects = makeDummyTaskSubjects()
-    MainScreen(mainViewModel)
+    MyTaskManagementApp(mainViewModel)
 }
