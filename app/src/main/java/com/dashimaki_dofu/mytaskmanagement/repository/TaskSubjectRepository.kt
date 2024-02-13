@@ -1,6 +1,6 @@
 package com.dashimaki_dofu.mytaskmanagement.repository
 
-import com.dashimaki_dofu.mytaskmanagement.RoomApplication
+import com.dashimaki_dofu.mytaskmanagement.MyTaskManagementApplication
 import com.dashimaki_dofu.mytaskmanagement.database.TaskSubjectDao
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.Task
@@ -25,7 +25,7 @@ interface TaskSubjectRepository {
 }
 
 class TaskSubjectRepositoryImpl(
-    private val taskSubjectDao: TaskSubjectDao = RoomApplication.database.taskSubjectDao()
+    private val taskSubjectDao: TaskSubjectDao = MyTaskManagementApplication.database.taskSubjectDao()
 ) : TaskSubjectRepository {
     override suspend fun getAllTaskSubjects(): List<TaskSubject> {
         return taskSubjectDao.getAllTaskSubjects()

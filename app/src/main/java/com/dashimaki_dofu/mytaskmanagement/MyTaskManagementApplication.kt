@@ -6,12 +6,12 @@ import com.dashimaki_dofu.mytaskmanagement.database.TaskDatabase
 
 
 /**
- * RoomApplication
+ * MyTaskManagementApplication
  *
  * Created by Yoshiyasu on 2024/02/10
  */
 
-class RoomApplication: Application() {
+class MyTaskManagementApplication: Application() {
     companion object {
         lateinit var database: TaskDatabase
     }
