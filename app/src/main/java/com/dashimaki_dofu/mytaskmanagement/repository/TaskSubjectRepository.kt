@@ -1,11 +1,13 @@
 package com.dashimaki_dofu.mytaskmanagement.repository
 
-import com.dashimaki_dofu.mytaskmanagement.RoomApplication
 import com.dashimaki_dofu.mytaskmanagement.database.TaskSubjectDao
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.Task
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
 
 /**
@@ -15,7 +17,8 @@ import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
  */
 
 interface TaskSubjectRepository {
-    suspend fun getAllTaskSubjects(): List<TaskSubject>
+    fun getAllTaskSubjects(): Flow<List<TaskSubject>>
+    fun getTaskSubject(taskId: Int): Flow<TaskSubject>
     suspend fun createTask(task: Task)
     suspend fun updateTask(task: Task)
     suspend fun deleteTask(task: Task)
@@ -24,11 +27,17 @@ interface TaskSubjectRepository {
     suspend fun deleteSubTask(subTask: SubTask)
 }
 
-class TaskSubjectRepositoryImpl(
-    private val taskSubjectDao: TaskSubjectDao = RoomApplication.database.taskSubjectDao()
+class TaskSubjectRepositoryImpl @Inject constructor(
+    private val taskSubjectDao: TaskSubjectDao
 ) : TaskSubjectRepository {
-    override suspend fun getAllTaskSubjects(): List<TaskSubject> {
-        return taskSubjectDao.getAllTaskSubjects()
+    override fun getAllTaskSubjects(): Flow<List<TaskSubject>> {
+//        return taskSubjectDao.getAllTaskSubjects()
+        return flowOf(makeDummyTaskSubjects())
+    }
+
+    override fun getTaskSubject(taskId: Int): Flow<TaskSubject> {
+//        return taskSubjectDao.getTaskSubject(taskId)
+        return flowOf(makeDummyTaskSubjects().first { it.task.id == taskId })
     }
 
     override suspend fun createTask(task: Task) {
@@ -57,8 +66,12 @@ class TaskSubjectRepositoryImpl(
 }
 
 class TaskSubjectRepositoryMock : TaskSubjectRepository {
-    override suspend fun getAllTaskSubjects(): List<TaskSubject> {
-        return makeDummyTaskSubjects()
+    override fun getAllTaskSubjects(): Flow<List<TaskSubject>> {
+        return flowOf(makeDummyTaskSubjects())
+    }
+
+    override fun getTaskSubject(taskId: Int): Flow<TaskSubject> {
+        return flowOf(makeDummyTaskSubjects().first())
     }
 
     override suspend fun createTask(task: Task) = Unit

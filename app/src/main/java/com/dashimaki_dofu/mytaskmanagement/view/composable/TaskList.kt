@@ -21,7 +21,10 @@ import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
  */
 
 @Composable
-fun TaskList(taskSubjects: List<TaskSubject>, onClickItem: (id: Int) -> Unit) {
+fun TaskList(
+    taskSubjects: List<TaskSubject>,
+    onClickItem: (id: Int) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .padding(all = 16.dp),

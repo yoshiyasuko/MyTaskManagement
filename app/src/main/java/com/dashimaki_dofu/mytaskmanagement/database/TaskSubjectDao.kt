@@ -10,6 +10,7 @@ import androidx.room.Update
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.Task
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
+import kotlinx.coroutines.flow.Flow
 
 
 /**
@@ -22,7 +23,11 @@ import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 interface TaskSubjectDao {
     @Transaction
     @Query("select * from tasks")
-    suspend fun getAllTaskSubjects(): List<TaskSubject>
+    fun getAllTaskSubjects(): Flow<List<TaskSubject>>
+
+    @Transaction
+    @Query("select * from tasks where id=:taskId limit 1")
+    fun getTaskSubject(taskId: Int): Flow<List<TaskSubject>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(task: Task)

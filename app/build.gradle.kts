@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
 }
 
@@ -55,6 +56,7 @@ dependencies {
     val roomVersion = "2.6.1"
     val lifecycleVersion = "2.7.0"
     val composeRuntimeVersion = "1.6.1"
+    val hiltVersion = "2.48"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}")
@@ -73,6 +75,9 @@ dependencies {
     implementation("androidx.room:room-ktx:${roomVersion}")
     annotationProcessor("androidx.room:room-compiler:${roomVersion}")
     kapt("androidx.room:room-compiler:${roomVersion}")  // KSPに置き換えたいが、エラーが解決できないため一旦kaptで
+    implementation("com.google.dagger:hilt-android:$hiltVersion")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    kapt("com.google.dagger:hilt-compiler:$hiltVersion")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
