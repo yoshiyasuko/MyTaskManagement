@@ -2,6 +2,7 @@ package com.dashimaki_dofu.mytaskmanagement.view.composable.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,7 +20,7 @@ import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
  */
 
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
     MyTaskManagementTheme {
         val navController = rememberNavController()
         NavHost(
@@ -31,7 +32,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 route = NavLinks.TaskList.route
             ) {
                 TaskListScreen(
-                    taskSubjects = viewModel.taskSubjects,
+                    taskSubjects = mainViewModel.taskSubjects,
                     onClickItem = { taskId ->
                         navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
                     }
@@ -48,7 +49,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 )
             ) { backStackEntry ->
                 val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskDetail.ARGUMENT_ID) ?: -1
-                val task = viewModel.taskSubjects.first {
+                val task = mainViewModel.taskSubjects.first {
                     it.task.id == taskId
                 }
                 TaskDetailScreen(taskSubject = task, onClickNavigationIcon = {
@@ -62,5 +63,5 @@ fun MainScreen(viewModel: MainViewModel) {
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen(viewModel = MainViewModel())
+    MainScreen()
 }
