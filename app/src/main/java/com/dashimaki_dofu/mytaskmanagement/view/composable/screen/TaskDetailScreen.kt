@@ -40,11 +40,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
+import com.dashimaki_dofu.mytaskmanagement.repository.TaskSubjectRepository
+import com.dashimaki_dofu.mytaskmanagement.repository.TaskSubjectRepositoryImpl
+import com.dashimaki_dofu.mytaskmanagement.repository.TaskSubjectRepositoryMock
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel
 
 
 /**
@@ -55,7 +60,15 @@ import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit) {
+fun TaskDetailScreen(
+    taskSubject: TaskSubject,
+    taskSubjectRepository: TaskSubjectRepository = TaskSubjectRepositoryImpl(),
+    taskDetailViewModel: TaskDetailViewModel = viewModel { TaskDetailViewModel(
+        taskSubjectRepository = taskSubjectRepository,
+        taskSubject = taskSubject
+    ) },
+    onClickNavigationIcon: () -> Unit
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -64,7 +77,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(taskSubject.task.title)
+                        Text(taskDetailViewModel.taskSubject.task.title)
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -92,7 +105,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
                             shape = RoundedCornerShape(8.dp)
                         )
                         .background(
-                            taskSubject.task.color
+                            taskDetailViewModel.taskSubject.task.color
                                 .copy(alpha = 0.3f)
                                 .compositeOver(Color.White)
                         )
@@ -105,7 +118,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
                     ) {
                         Row {
                             Text(
-                                text = "締切: ${taskSubject.task.formattedDeadLineString}",
+                                text = "締切: ${taskDetailViewModel.taskSubject.task.formattedDeadLineString}",
                                 color = Color.Red,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp
@@ -117,7 +130,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
                                 .height(60.dp)
                                 .border(
                                     width = 4.dp,
-                                    color = taskSubject.task.color,
+                                    color = taskDetailViewModel.taskSubject.task.color,
                                     shape = RoundedCornerShape(12.dp)
                                 )
                                 .fillMaxWidth()
@@ -126,7 +139,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
 
                             Box(
                                 modifier = Modifier
-                                    .fillMaxWidth(taskSubject.progressRate)
+                                    .fillMaxWidth(taskDetailViewModel.taskSubject.progressRate)
                                     .fillMaxHeight()
                                     .border(
                                         width = 0.dp,
@@ -137,7 +150,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
                                         )
                                     )
                                     .background(
-                                        color = taskSubject.task.color,
+                                        color = taskDetailViewModel.taskSubject.task.color,
                                         shape = RoundedCornerShape(
                                             topStart = 12.dp,
                                             bottomStart = 12.dp
@@ -146,7 +159,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
                                     .constrainAs(progressBarRef) {}
                             )
                             Text(
-                                text = "${(taskSubject.progressRate * 100).toInt()}%",
+                                text = "${(taskDetailViewModel.taskSubject.progressRate * 100).toInt()}%",
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = colorResource(id = R.color.lightGray1),
@@ -159,7 +172,7 @@ fun TaskDetailScreen(taskSubject: TaskSubject, onClickNavigationIcon: () -> Unit
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         LazyColumn {
-                            items(taskSubject.subTasks) { subTask ->
+                            items(taskDetailViewModel.taskSubject.subTasks) { subTask ->
                                 SubTaskListItem(subTask = subTask)
                             }
                         }
@@ -211,6 +224,7 @@ fun SubTaskListItem(subTask: SubTask) {
 fun TaskDetailScreenPreview() {
     TaskDetailScreen(
         taskSubject = makeDummyTaskSubjects().first(),
+        taskSubjectRepository = TaskSubjectRepositoryMock(),
         onClickNavigationIcon = {}
     )
 }

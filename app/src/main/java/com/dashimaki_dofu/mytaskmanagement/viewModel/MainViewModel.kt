@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -20,12 +19,12 @@ class MainViewModel : ViewModel() {
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
 
-    val taskSubjects: List<TaskSubject> by lazy { makeDummyTaskSubjects() }
+    lateinit var taskSubjects: List<TaskSubject>
 
     init {
         viewModelScope.launch {
-            // run background task here
-            delay(2000)
+            // TODO: load taskSubjects from Room
+            taskSubjects = makeDummyTaskSubjects()
             _loading.value = false
         }
     }
