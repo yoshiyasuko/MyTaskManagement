@@ -54,6 +54,7 @@ dependencies {
     val navVersion = "2.7.7"
     val roomVersion = "2.6.1"
     val lifecycleVersion = "2.7.0"
+    val composeRuntimeVersion = "1.6.1"
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}")
@@ -64,6 +65,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.runtime:runtime-livedata:${composeRuntimeVersion}")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-alpha08")
     implementation("androidx.navigation:navigation-compose:${navVersion}")

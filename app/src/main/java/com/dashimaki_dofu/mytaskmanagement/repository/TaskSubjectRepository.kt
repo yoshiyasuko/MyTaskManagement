@@ -1,9 +1,11 @@
 package com.dashimaki_dofu.mytaskmanagement.repository
 
+import com.dashimaki_dofu.mytaskmanagement.RoomApplication
 import com.dashimaki_dofu.mytaskmanagement.database.TaskSubjectDao
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.Task
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 
 
 /**
@@ -23,7 +25,7 @@ interface TaskSubjectRepository {
 }
 
 class TaskSubjectRepositoryImpl(
-    private val taskSubjectDao: TaskSubjectDao
+    private val taskSubjectDao: TaskSubjectDao = RoomApplication.database.taskSubjectDao()
 ) : TaskSubjectRepository {
     override suspend fun getAllTaskSubjects(): List<TaskSubject> {
         return taskSubjectDao.getAllTaskSubjects()
@@ -52,4 +54,17 @@ class TaskSubjectRepositoryImpl(
     override suspend fun deleteSubTask(subTask: SubTask) {
         taskSubjectDao.deleteSubTask(subTask)
     }
+}
+
+class TaskSubjectRepositoryMock : TaskSubjectRepository {
+    override suspend fun getAllTaskSubjects(): List<TaskSubject> {
+        return makeDummyTaskSubjects()
+    }
+
+    override suspend fun createTask(task: Task) = Unit
+    override suspend fun updateTask(task: Task) = Unit
+    override suspend fun deleteTask(task: Task) = Unit
+    override suspend fun createSubTask(subTask: SubTask) = Unit
+    override suspend fun updateSubTask(subTask: SubTask) = Unit
+    override suspend fun deleteSubTask(subTask: SubTask) = Unit
 }

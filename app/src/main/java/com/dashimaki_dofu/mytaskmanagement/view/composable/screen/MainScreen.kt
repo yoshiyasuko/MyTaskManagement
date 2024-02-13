@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dashimaki_dofu.mytaskmanagement.NavLinks
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.MyTaskManagementTheme
 import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
 
@@ -49,12 +50,16 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
                 )
             ) { backStackEntry ->
                 val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskDetail.ARGUMENT_ID) ?: -1
-                val task = mainViewModel.taskSubjects.first {
+                mainViewModel.taskSubjects.firstOrNull {
                     it.task.id == taskId
+                }?.let {
+                    TaskDetailScreen(
+                        taskSubject = it,
+                        onClickNavigationIcon = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
-                TaskDetailScreen(taskSubject = task, onClickNavigationIcon = {
-                    navController.navigateUp()
-                })
             }
         }
     }
@@ -63,5 +68,7 @@ fun MainScreen(mainViewModel: MainViewModel = viewModel()) {
 @Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
-    MainScreen()
+    val mainViewModel = MainViewModel()
+    mainViewModel.taskSubjects = makeDummyTaskSubjects()
+    MainScreen(mainViewModel)
 }
