@@ -32,6 +32,9 @@ jobs:
           ENV_SIGN_STORE_PASSWORD: ${{secrets.ENV_SIGN_STORE_PASSWORD}}
         run: ./gradlew assembleRelease
 
+      - name: Find APK Location
+        run: find ./ -name app-release.apk
+
       - name: Deploy to App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
