@@ -25,6 +25,11 @@ jobs:
       - name: Grant Permission gradlew
         run: chmod +x gradlew
 
+      - name: Make google-service.json
+        env:
+          GOOGLE_SERVICE: ${{ secrets.GOOGLE_SERVICE_JSON }}
+        run: echo $GOOGLE_SERVICE | base64 --decode --ignore-garbage > ./app/google-services.json
+
       - name: Building Release APK
         env:
           ENV_SIGN_KEYSTORE_BASE64: ${{secrets.ENV_SIGN_KEYSTORE_BASE64}}
