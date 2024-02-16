@@ -12,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          # テストでdevelop指定
-          ref: 'develop'
+          # テストで本ブランチ指定
+          ref: 'feature/4-build-using-github-actions'
 
       - name: set up JDK 17
         uses: actions/setup-java@v2
