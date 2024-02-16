@@ -34,7 +34,7 @@ jobs:
         run: ./gradlew assembleRelease
 
       - name: Show ./app directory
-        run: ls -l ./app/build/outputs/apk
+        run: ls -l ./app/build/outputs/apk/release
 
       - name: Deploy to App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
