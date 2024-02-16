@@ -1,3 +1,5 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -23,9 +25,30 @@ android {
         }
     }
 
+    val releaseSigningConfigName = "release_signing_config"
+    signingConfigs {
+        create(releaseSigningConfigName) {
+            val releaseKeystoreFileName = "release-keystore.jks"
+            if (System.getenv("ENV_SIGN_KEYSTORE_BASE64") != null) {
+                System.getenv("ENV_SIGN_KEYSTORE_BASE64").let { base64 ->
+                    val decoder = Base64.getDecoder()
+                    File(releaseKeystoreFileName).also { file ->
+                        file.createNewFile()
+                        file.writeBytes(decoder.decode(base64))
+                    }
+                }
+            }
+            storeFile = rootProject.file(releaseKeystoreFileName)
+            storePassword = System.getenv("ENV_SIGN_STORE_PASSWORD")
+            keyAlias = System.getenv("ENV_SIGN_KEY_ALIAS")
+            keyPassword = System.getenv("ENV_SIGN_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName(releaseSigningConfigName)
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
