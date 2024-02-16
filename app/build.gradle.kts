@@ -1,8 +1,11 @@
+import java.util.Base64
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -22,9 +25,30 @@ android {
         }
     }
 
+    val releaseSigningConfigName = "release_signing_config"
+    signingConfigs {
+        create(releaseSigningConfigName) {
+            val releaseKeystoreFileName = "release-keystore.jks"
+            if (System.getenv("ENV_SIGN_KEYSTORE_BASE64") != null) {
+                System.getenv("ENV_SIGN_KEYSTORE_BASE64").let { base64 ->
+                    val decoder = Base64.getMimeDecoder()
+                    File(releaseKeystoreFileName).also { file ->
+                        file.createNewFile()
+                        file.writeBytes(decoder.decode(base64))
+                    }
+                }
+            }
+            storeFile = rootProject.file(releaseKeystoreFileName)
+            storePassword = System.getenv("ENV_SIGN_STORE_PASSWORD")
+            keyAlias = System.getenv("ENV_SIGN_KEY_ALIAS")
+            keyPassword = System.getenv("ENV_SIGN_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName(releaseSigningConfigName)
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -78,6 +102,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-analytics")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
