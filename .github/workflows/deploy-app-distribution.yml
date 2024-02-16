@@ -41,4 +41,4 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: release
-          file: app/release/app-release.apk
+          file: ./app/release/app-release.apk
