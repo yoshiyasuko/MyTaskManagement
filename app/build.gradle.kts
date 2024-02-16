@@ -31,7 +31,7 @@ android {
             val releaseKeystoreFileName = "release-keystore.jks"
             if (System.getenv("ENV_SIGN_KEYSTORE_BASE64") != null) {
                 System.getenv("ENV_SIGN_KEYSTORE_BASE64").let { base64 ->
-                    val decoder = Base64.getDecoder()
+                    val decoder = Base64.getMimeDecoder()
                     File(releaseKeystoreFileName).also { file ->
                         file.createNewFile()
                         file.writeBytes(decoder.decode(base64))
