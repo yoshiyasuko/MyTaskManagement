@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.dashimaki_dofu.mytaskmanagement.R
+import com.dashimaki_dofu.mytaskmanagement.database.defaultId
 
 
 /**
@@ -26,8 +27,8 @@ import com.dashimaki_dofu.mytaskmanagement.R
     ]
 )
 data class SubTask(
-    @PrimaryKey(autoGenerate = true) var id: Int = -1,
-    @ColumnInfo(index = true) var taskId: Int = -1,
+    @PrimaryKey(autoGenerate = true) var id: Int = defaultId,
+    var taskId: Int = defaultId,
     var title: String = "",
     var status: SubTaskStatus = SubTaskStatus.INCOMPLETE
 ) {

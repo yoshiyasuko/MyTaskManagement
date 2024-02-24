@@ -11,11 +11,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.text.SimpleDateFormat
 import java.util.Date
+import com.dashimaki_dofu.mytaskmanagement.database.defaultId
 
 // 課題
 @Entity(tableName = "tasks")
 data class Task(
-    @PrimaryKey(autoGenerate = true) var id: Int = -1,
+    @PrimaryKey(autoGenerate = true) var id: Int = defaultId,
     var title: String = "",
     var colorValue: Long = 0,
     var deadline: Date? = null
