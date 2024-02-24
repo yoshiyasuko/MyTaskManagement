@@ -28,7 +28,7 @@ import com.dashimaki_dofu.mytaskmanagement.database.defaultId
 )
 data class SubTask(
     @PrimaryKey(autoGenerate = true) var id: Int = defaultId,
-    var taskId: Int = defaultId,
+    @ColumnInfo(index = true) var taskId: Int = defaultId,
     var title: String = "",
     var status: SubTaskStatus = SubTaskStatus.INCOMPLETE
 ) {
