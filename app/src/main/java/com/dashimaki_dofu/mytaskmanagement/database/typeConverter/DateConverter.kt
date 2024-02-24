@@ -1,7 +1,7 @@
 package com.dashimaki_dofu.mytaskmanagement.database.typeConverter
 
 import androidx.room.TypeConverter
-import java.util.Date
+import java.time.Instant
 
 
 /**
@@ -12,12 +12,12 @@ import java.util.Date
 
 class DateConverter {
     @TypeConverter
-    fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+    fun fromTimestamp(value: Long?): Instant? {
+        return value?.let { Instant.ofEpochMilli(it) }
     }
 
     @TypeConverter
-    fun toTimestamp(date: Date?): Long? {
-        return date?.time
+    fun toTimestamp(date: Instant?): Long? {
+        return date?.toEpochMilli()
     }
 }

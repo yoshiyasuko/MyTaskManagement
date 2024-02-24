@@ -12,6 +12,14 @@ import androidx.room.Relation
 
 // 「課題 : 子課題 = 1 : N」のリレーションを実現するラッパーオブジェクト
 class TaskSubject {
+    companion object {
+        fun initialize() : TaskSubject {
+            return TaskSubject().also {
+                it.task = Task()
+                it.subTasks = emptyList()
+            }
+        }
+    }
     @Embedded
     lateinit var task: Task
 

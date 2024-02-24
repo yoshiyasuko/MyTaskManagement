@@ -15,6 +15,7 @@ import com.dashimaki_dofu.mytaskmanagement.model.Task
  */
 
 const val roomSchemaVersion = 1
+const val defaultId = 0
 
 @Database(
     entities = [Task::class, SubTask::class],
