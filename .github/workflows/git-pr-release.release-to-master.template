@@ -1,5 +1,5 @@
 Merge to Master from Release
-## Pull Request
+## Pull Requests
 
 <% pull_requests.each do |pr| -%>
 <%= pr.to_checklist_item %>
