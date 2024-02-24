@@ -12,14 +12,19 @@ import androidx.room.PrimaryKey
 import java.text.SimpleDateFormat
 import java.util.Date
 import com.dashimaki_dofu.mytaskmanagement.database.defaultId
+import com.dashimaki_dofu.mytaskmanagement.ui.theme.TaskColor
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 // 課題
 @Entity(tableName = "tasks")
 data class Task(
     @PrimaryKey(autoGenerate = true) var id: Int = defaultId,
     var title: String = "",
-    var colorValue: Long = 0,
     var deadline: Date? = null
+    var colorValue: Long = TaskColor.YELLOW.code,
 ) {
     // 締切表示: "M/d"形式
     val formattedDeadLineString: String
