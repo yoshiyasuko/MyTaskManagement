@@ -1,6 +1,7 @@
 package com.dashimaki_dofu.mytaskmanagement.model
 
 import androidx.annotation.DrawableRes
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
