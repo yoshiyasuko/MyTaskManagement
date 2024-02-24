@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.App.First" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FFD580</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/baseline_article_24</item>
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="postSplashScreenTheme">@style/Theme.MyTaskManagement</item>
     </style>
 </resources>
