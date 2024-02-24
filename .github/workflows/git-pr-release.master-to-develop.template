@@ -1,4 +1,4 @@
-Merge to Master from Release
+Merge to Develop from Master
 ## Pull Requests
 
 <% pull_requests.each do |pr| -%>
