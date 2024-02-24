@@ -1,6 +1,7 @@
-package com.dashimaki_dofu.mytaskmanagement.view
+package com.dashimaki_dofu.mytaskmanagement.view.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,71 +20,82 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import com.dashimaki_dofu.mytaskmanagement.R
-import com.dashimaki_dofu.mytaskmanagement.model.Task
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
-import java.util.Date
+import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
+import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 
 
 /**
- * TaskListRow
+ * TaskListItem
  *
  * Created by Yoshiyasu on 2024/02/05
  */
 
 @Composable
-fun TaskListRow(task: Task) {
+fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
     Box(
         modifier = Modifier
-            .height(60.dp)
+            .clickable {
+                onClick(taskSubject.task.id)
+            }
+            .height(64.dp)
             .shadow(
                 elevation = 6.dp,
                 shape = RoundedCornerShape(8.dp)
             )
             .background(
-                task.color
+                taskSubject.task.color
                     .copy(alpha = 0.3f)
                     .compositeOver(Color.White)
             )
-        ,
-        contentAlignment = Alignment.Center,
     ) {
-        ConstraintLayout {
-            val (progressBarRef, progressTextRef) = createRefs()
-
-            Box(
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .background(taskSubject.task.color)
+                .fillMaxWidth(taskSubject.progressRate)
+        )
+        Box(
+            modifier = Modifier.padding(all = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxHeight()
-                    .background(task.color)
-                    .fillMaxWidth(task.progressRate)
-                    .constrainAs(progressBarRef) {}
-            )
-            Box(
-                modifier = Modifier.padding(all = 8.dp),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
             ) {
+                Spacer(modifier = Modifier.width(20.dp))
+                Text(
+                    text = taskSubject.task.title,
+                    modifier = Modifier
+                        .weight(1f),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = 16.sp,
+                    color = taskSubject.task.listTitleColor
+                )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .fillMaxWidth()
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Spacer(modifier = Modifier.width(40.dp))
-                        Text(
-                            text = task.title,
-                            fontSize = 24.sp,
-                            color = task.listTitleColor
-                        )
-                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        modifier = Modifier
+                            .width(68.dp),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = taskSubject.progressRateStringColor,
+                        textAlign = TextAlign.End,
+                        text = taskSubject.progressRateString
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -94,7 +106,7 @@ fun TaskListRow(task: Task) {
                         )
                         Text(
                             textAlign = TextAlign.Center,
-                            text = task.formattedDeadLineString,
+                            text = taskSubject.task.formattedDeadLineString,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Red
@@ -102,29 +114,15 @@ fun TaskListRow(task: Task) {
                     }
                 }
             }
-            Text(
-                text = "${(task.progressRate * 100).toInt()}%",
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                color = colorResource(id = R.color.lightGray1),
-                modifier = Modifier.constrainAs(progressTextRef) {
-                    bottom.linkTo(progressBarRef.bottom)
-                    centerAround(progressBarRef.absoluteRight)
-                }
-            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun TaskListRowSample() {
-    TaskListRow(
-        task = Task(
-            title = "世界観",
-            color = colorResource(id = R.color.taskColor1),
-            subTasks = makeDummySubTasks(),
-            deadline = Date()
-        )
+fun TaskListItemPreview() {
+    TaskListItem(
+        taskSubject = makeDummyTaskSubjects().first(),
+        onClick = { }
     )
 }
