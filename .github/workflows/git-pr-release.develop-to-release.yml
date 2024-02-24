@@ -1,0 +1,32 @@
+name: Merge to Release from Develop
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  git-pr-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.1
+
+      - name: Creates a release pull request
+        env:
+          GIT_PR_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_PR_RELEASE_BRANCH_STAGING: develop
+          GIT_PR_RELEASE_BRANCH_PRODUCTION: release
+          GIT_PR_RELEASE_TEMPLATE: .github/workflows/git-pr-release.develop-to-release.template
+          GIT_PR_RELEASE_VERSION: 1.9.0
+          GIT_PR_RELEASE_LABELS: release
+        run: |
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          gem install -N git-pr-release -v $GIT_PR_RELEASE_VERSION
+          git-pr-release --no-fetch

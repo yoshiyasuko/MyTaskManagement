@@ -1,0 +1,6 @@
+Merge to Develop from Master
+## Pull Requests
+
+<% pull_requests.each do |pr| -%>
+<%= pr.to_checklist_item %>
+<% end -%>
