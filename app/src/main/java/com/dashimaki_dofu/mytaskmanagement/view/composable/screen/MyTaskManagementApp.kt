@@ -13,7 +13,8 @@ import com.dashimaki_dofu.mytaskmanagement.NavLinks
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.MyTaskManagementTheme
 import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
-import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModelImpl
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskEditViewModelImpl
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel
 
 
@@ -68,6 +69,45 @@ fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
                         navController.navigate(NavLinks.TaskEdit.createRoute(taskId))
                     },
                     onDeleteCompleted = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+            // 課題追加画面
+            composable(
+                route = NavLinks.TaskCreate.route
+            ) {
+                val viewModel = hiltViewModel<TaskEditViewModelImpl>()
+                TaskEditScreen(
+                    viewModel = viewModel,
+                    onClickNavigationIcon = {
+                        navController.navigateUp()
+                    },
+                    onSaveCompleted = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+
+            // 課題編集画面
+            composable(
+                route = NavLinks.TaskEdit.route,
+                arguments = listOf(
+                    navArgument(NavLinks.TaskEdit.ARGUMENT_ID) {
+                        type = NavType.IntType
+                    }
+                )
+            ) { backStackEntry ->
+                val viewModel = hiltViewModel<TaskEditViewModelImpl>()
+                val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskEdit.ARGUMENT_ID)
+                TaskEditScreen(
+                    taskId = taskId,
+                    viewModel = viewModel,
+                    onClickNavigationIcon = {
+                        navController.navigateUp()
+                    },
+                    onSaveCompleted = {
                         navController.navigateUp()
                     }
                 )
