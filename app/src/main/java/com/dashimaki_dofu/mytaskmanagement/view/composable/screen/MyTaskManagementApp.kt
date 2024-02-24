@@ -40,6 +40,9 @@ fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
                     taskListViewModel = viewModel,
                     onClickItem = { taskId ->
                         navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
+                    },
+                    onClickAddTaskButton = {
+                        navController.navigate(NavLinks.TaskCreate.route)
                     }
                 )
             }
