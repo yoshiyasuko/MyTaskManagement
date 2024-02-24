@@ -9,8 +9,6 @@ import androidx.core.graphics.red
 import androidx.core.graphics.toColor
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.text.SimpleDateFormat
-import java.util.Date
 import com.dashimaki_dofu.mytaskmanagement.database.defaultId
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.TaskColor
 import java.time.Instant
@@ -23,17 +21,17 @@ import java.time.format.DateTimeFormatter
 data class Task(
     @PrimaryKey(autoGenerate = true) var id: Int = defaultId,
     var title: String = "",
-    var deadline: Date? = null
     var colorValue: Long = TaskColor.YELLOW.code,
+    var deadline: Instant? = null
 ) {
     // 締切表示: "M/d"形式
     val formattedDeadLineString: String
         get() {
-            val formatter = SimpleDateFormat("M/d")
-            deadline?.let {
-                return formatter.format(it)
-            }
-            return "-"
+            return deadline?.let {
+                val localDateTime = LocalDateTime.ofInstant(deadline, ZoneId.systemDefault())
+                val formatter = DateTimeFormatter.ofPattern("M/d")
+                formatter.format(localDateTime)
+            } ?: ""
         }
 
     val color: Color
