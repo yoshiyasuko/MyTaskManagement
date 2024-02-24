@@ -16,4 +16,11 @@ sealed class NavLinks(val route: String) {
             return "taskDetail/${id}"
         }
     }
+    data object TaskCreate : NavLinks("taskCreate")
+    data object TaskEdit : NavLinks("taskEdit/{id}") {
+        const val ARGUMENT_ID = "id"
+        fun createRoute(id: Int): String {
+            return "taskEdit/${id}"
+        }
+    }
 }

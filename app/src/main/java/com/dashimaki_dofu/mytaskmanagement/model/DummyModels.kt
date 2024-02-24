@@ -12,7 +12,7 @@ import java.time.Instant
 
 // ダミーの課題ラッパー: デバッグ用
 fun makeDummyTaskSubjects(): List<TaskSubject> {
-    return (0..<20).map {
+    return (1..20).map {
         val taskSubject = TaskSubject()
         taskSubject.task = makeDummyTask(it)
         taskSubject.subTasks = makeDummySubTasks(taskId = it)
@@ -24,7 +24,7 @@ fun makeDummyTaskSubjects(): List<TaskSubject> {
 fun makeDummyTask(taskId: Int): Task {
     return Task(
         id = taskId,
-        title = "課題${taskId + 1}",
+        title = "課題${taskId}",
         colorValue = when (taskId % 3) {
             0 -> TaskColor.YELLOW.code
             1 -> TaskColor.RED.code
@@ -36,11 +36,11 @@ fun makeDummyTask(taskId: Int): Task {
 
 // ダミーの子課題リスト: デバッグ用
 fun makeDummySubTasks(taskId: Int = 0): List<SubTask> {
-    return (0..<10).map {
+    return (1..10).map {
         SubTask(
             id = it,
             taskId = taskId,
-            title = "課題${taskId + 1}の子課題${it + 1}",
+            title = "課題${taskId}の子課題${it}",
             status = when (taskId % 3) {
                 0 -> when (it) {
                     in 0..1 -> SubTaskStatus.COMPLETED
