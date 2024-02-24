@@ -1,7 +1,9 @@
 package com.dashimaki_dofu.mytaskmanagement.model
 
+import androidx.compose.ui.graphics.Color
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.dashimaki_dofu.mytaskmanagement.ui.theme.TaskColor
 
 
 /**
@@ -31,5 +33,19 @@ class TaskSubject {
         get() {
             if (subTasks.isEmpty()) return 0f
             return subTasks.count { it.status == SubTaskStatus.COMPLETED } / subTasks.count().toFloat()
+        }
+
+    val progressRateString: String
+        get() {
+            return "${(progressRate * 100).toInt()}%"
+        }
+
+    val progressRateStringColor: Color
+        get() {
+            return if (subTasks.any { it.status != SubTaskStatus.COMPLETED } || subTasks.isEmpty()) {
+                TaskColor.LIGHT_GRAY.color
+            } else {
+                TaskColor.LIGHT_GREEN.color
+            }
         }
 }
