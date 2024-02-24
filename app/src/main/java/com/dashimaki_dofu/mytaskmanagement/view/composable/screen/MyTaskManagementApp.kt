@@ -56,12 +56,18 @@ fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
                     }
                 )
             ) { backStackEntry ->
-                val viewModel = hiltViewModel<TaskDetailViewModel>()
+                val viewModel = hiltViewModel<TaskDetailViewModelImpl>()
                 val taskId = backStackEntry.arguments?.getInt(NavLinks.TaskDetail.ARGUMENT_ID) ?: -1
-                viewModel.setTaskId(taskId)
                 TaskDetailScreen(
-                    taskDetailViewModel = viewModel,
+                    taskId = taskId,
+                    viewModel = viewModel,
                     onClickNavigationIcon = {
+                        navController.navigateUp()
+                    },
+                    onClickEditButton = {
+                        navController.navigate(NavLinks.TaskEdit.createRoute(taskId))
+                    },
+                    onDeleteCompleted = {
                         navController.navigateUp()
                     }
                 )
