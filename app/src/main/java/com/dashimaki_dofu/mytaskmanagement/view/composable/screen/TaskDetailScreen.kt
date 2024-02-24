@@ -207,43 +207,42 @@ fun TaskDetailScreen(
                                         SubTaskListItem(subTask = subTask)
                                     }
                                 }
-
-                                if (showDeleteAlertDialog) {
-                                    AlertDialog(
-                                        onDismissRequest = {
-                                            viewModel.dismissDeleteAlertDialog()
-                                        },
-                                        confirmButton = {
-                                            TextButton(
-                                                onClick = {
-                                                    viewModel.deleteTask(
-                                                        taskSubject.task.id,
-                                                        completion = onDeleteCompleted
-                                                    )
-                                                }
-                                            ) {
-                                                Text(text = "OK")
-                                            }
-                                        },
-                                        dismissButton = {
-                                            TextButton(
-                                                onClick = {
-                                                    viewModel.dismissDeleteAlertDialog()
-                                                }
-                                            ) {
-                                                Text(text = "キャンセル")
-                                            }
-                                        },
-                                        title = {
-                                            Text(text = "${taskSubject.task.title}を削除します。よろしいですか？")
-                                        },
-                                        text = {
-                                            Text(text = "この操作は元に戻せません。")
-                                        }
-                                    )
-                                }
                             }
                         }
+                    }
+                    if (showDeleteAlertDialog) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                viewModel.dismissDeleteAlertDialog()
+                            },
+                            confirmButton = {
+                                TextButton(
+                                    onClick = {
+                                        viewModel.deleteTask(
+                                            taskSubject.task.id,
+                                            completion = onDeleteCompleted
+                                        )
+                                    }
+                                ) {
+                                    Text(text = "OK")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(
+                                    onClick = {
+                                        viewModel.dismissDeleteAlertDialog()
+                                    }
+                                ) {
+                                    Text(text = "キャンセル")
+                                }
+                            },
+                            title = {
+                                Text(text = "${taskSubject.task.title}を削除します。よろしいですか？")
+                            },
+                            text = {
+                                Text(text = "この操作は元に戻せません。")
+                            }
+                        )
                     }
                 }
             }
