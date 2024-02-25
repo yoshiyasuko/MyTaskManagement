@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: develop
+          ref: release
           fetch-depth: 0
 
       - name: set up JDK 17
