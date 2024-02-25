@@ -27,8 +27,8 @@ jobs:
 
       - name: Get Version
         run: | 
-          echo "::set-output name=VERSION_CODE::$(./gradlew printVersionCode)"
-          echo "::set-output name=VERSION_NAME::$(./gradlew printVersionName)"
+          echo "::set-output name=VERSION_CODE::$(./gradlew -q printVersionCode)"
+          echo "::set-output name=VERSION_NAME::$(./gradlew -q printVersionName)"
         id: version
 
       - name: Create Pull Request
