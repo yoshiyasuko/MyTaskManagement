@@ -1,4 +1,6 @@
+
 import java.util.Base64
+import java.util.Locale
 
 plugins {
     id("com.android.application")
@@ -111,4 +113,85 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+
+class Version(private var code: Int, version: String) {
+    private var major: Int
+    private var minor: Int
+    private var patch: Int
+
+    init {
+        val (major, minor, patch) = version.split(".").map { it.toInt() }
+        this.major = major
+        this.minor = minor
+        this.patch = patch
+    }
+
+    val functionsByName = listOf(::bumpMajor, ::bumpMinor, ::bumpPatch).associateBy { it.name }
+
+    fun bumpMajor() {
+        major += 1
+        minor = 0
+        patch = 0
+
+        code += 1
+    }
+
+    fun bumpMinor() {
+        minor += 1
+        patch = 0
+
+        code += 1
+    }
+
+    fun bumpPatch() {
+        patch += 1
+
+        code += 1
+    }
+
+    fun getName(): String = "$major.$minor.$patch"
+    fun getCode(): Int = code
+}
+
+tasks.register("helloWorld") {
+    doFirst {
+        println("Hello World!")
+    }
+}
+
+tasks.addRule("Pattern: bump<TYPE>Version") {
+    if (this.matches(Regex("bump(Major|Minor|Patch)Version"))) {
+        task(this) {
+            doLast {
+                val type = this@addRule
+                    .replace(Regex("bump"), "")
+                    .replace(Regex("Version"), "")
+
+                println("Bumping ${type.lowercase(Locale.getDefault())} version...")
+
+                val oldVersionCode = android.defaultConfig.versionCode ?: return@doLast
+                val oldVersionName = android.defaultConfig.versionName ?: return@doLast
+                val version = Version(oldVersionCode, oldVersionName)
+
+                val methodName = "bump${type}"
+                version.functionsByName[methodName]?.invoke() ?: error("Unknown method: $methodName")
+
+                val newVersionCode = version.getCode()
+                val newVersionName = version.getName()
+
+                println("${oldVersionName}($oldVersionCode) -> ${newVersionName}($newVersionCode)")
+                var updated = buildFile.readText()
+                updated = updated.replaceFirst(
+                    "versionName = \"${oldVersionName}\"",
+                    "versionName = \"${newVersionName}\""
+                )
+                updated = updated.replaceFirst(
+                    "versionCode = $oldVersionCode",
+                    "versionCode = $newVersionCode"
+                )
+                buildFile.writeText(updated)
+            }
+        }
+    }
 }
