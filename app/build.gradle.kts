@@ -1,4 +1,6 @@
+
 import java.util.Base64
+import java.util.Locale
 
 plugins {
     id("com.android.application")
@@ -6,6 +8,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -46,6 +49,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
         release {
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName(releaseSigningConfigName)
@@ -103,7 +109,8 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     kapt("com.google.dagger:hilt-compiler:$hiltVersion")
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
+    implementation("com.google.firebase:firebase-analytics-ktx:21.5.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -111,4 +118,100 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+
+class Version(private var code: Int, version: String) {
+    private var major: Int
+    private var minor: Int
+    private var patch: Int
+
+    init {
+        val (major, minor, patch) = version.split(".").map { it.toInt() }
+        this.major = major
+        this.minor = minor
+        this.patch = patch
+    }
+
+    val functionsByName = listOf(::bumpMajor, ::bumpMinor, ::bumpPatch).associateBy { it.name }
+
+    @SuppressWarnings("unused")
+    fun bumpMajor() {
+        major += 1
+        minor = 0
+        patch = 0
+
+        code += 1
+    }
+
+    @SuppressWarnings("unused")
+    fun bumpMinor() {
+        minor += 1
+        patch = 0
+
+        code += 1
+    }
+
+    @SuppressWarnings("unused")
+    fun bumpPatch() {
+        patch += 1
+
+        code += 1
+    }
+
+    fun getName(): String = "$major.$minor.$patch"
+    fun getCode(): Int = code
+}
+
+tasks.addRule("Pattern: bump<TYPE>Version") {
+    if (this.matches(Regex("bump(Major|Minor|Patch)Version"))) {
+        task(this) {
+            doLast {
+                // コマンドから実行タイプを抽出
+                val type = this@addRule
+                    .replace(Regex("bump"), "")
+                    .replace(Regex("Version"), "")
+
+                println("Bumping ${type.lowercase(Locale.getDefault())} version...")
+
+                // 旧バージョンを取得
+                val oldVersionCode = android.defaultConfig.versionCode ?: return@doLast
+                val oldVersionName = android.defaultConfig.versionName ?: return@doLast
+                val version = Version(oldVersionCode, oldVersionName)
+
+                // メソッド名を取得しそのメソッドを実行（実行不可であればエラー）
+                val methodName = "bump${type}"
+                version.functionsByName[methodName]?.invoke() ?: error("Unknown method: $methodName")
+
+                // 更新したバージョンを取得
+                val newVersionCode = version.getCode()
+                val newVersionName = version.getName()
+
+                println("${oldVersionName}($oldVersionCode) -> ${newVersionName}($newVersionCode)")
+
+                // ビルドファイルに更新したversionName・versionCodeを書き込み
+                var updated = buildFile.readText()
+                updated = updated.replaceFirst(
+                    "versionName = \"${oldVersionName}\"",
+                    "versionName = \"${newVersionName}\""
+                )
+                updated = updated.replaceFirst(
+                    "versionCode = $oldVersionCode",
+                    "versionCode = $newVersionCode"
+                )
+                buildFile.writeText(updated)
+            }
+        }
+    }
+}
+
+tasks.register("printVersionCode") {
+    doLast {
+        println(android.defaultConfig.versionCode)
+    }
+}
+
+tasks.register("printVersionName") {
+    doLast {
+        println(android.defaultConfig.versionName)
+    }
 }
