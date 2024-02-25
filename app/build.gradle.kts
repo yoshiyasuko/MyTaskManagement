@@ -161,23 +161,29 @@ tasks.addRule("Pattern: bump<TYPE>Version") {
     if (this.matches(Regex("bump(Major|Minor|Patch)Version"))) {
         task(this) {
             doLast {
+                // コマンドから実行タイプを抽出
                 val type = this@addRule
                     .replace(Regex("bump"), "")
                     .replace(Regex("Version"), "")
 
                 println("Bumping ${type.lowercase(Locale.getDefault())} version...")
 
+                // 旧バージョンを取得
                 val oldVersionCode = android.defaultConfig.versionCode ?: return@doLast
                 val oldVersionName = android.defaultConfig.versionName ?: return@doLast
                 val version = Version(oldVersionCode, oldVersionName)
 
+                // メソッド名を取得しそのメソッドを実行（実行不可であればエラー）
                 val methodName = "bump${type}"
                 version.functionsByName[methodName]?.invoke() ?: error("Unknown method: $methodName")
 
+                // 更新したバージョンを取得
                 val newVersionCode = version.getCode()
                 val newVersionName = version.getName()
 
                 println("${oldVersionName}($oldVersionCode) -> ${newVersionName}($newVersionCode)")
+
+                // ビルドファイルに更新したversionName・versionCodeを書き込み
                 var updated = buildFile.readText()
                 updated = updated.replaceFirst(
                     "versionName = \"${oldVersionName}\"",
