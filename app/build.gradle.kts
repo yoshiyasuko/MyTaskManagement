@@ -129,6 +129,7 @@ class Version(private var code: Int, version: String) {
 
     val functionsByName = listOf(::bumpMajor, ::bumpMinor, ::bumpPatch).associateBy { it.name }
 
+    @SuppressWarnings("unused")
     fun bumpMajor() {
         major += 1
         minor = 0
@@ -137,6 +138,7 @@ class Version(private var code: Int, version: String) {
         code += 1
     }
 
+    @SuppressWarnings("unused")
     fun bumpMinor() {
         minor += 1
         patch = 0
@@ -144,6 +146,7 @@ class Version(private var code: Int, version: String) {
         code += 1
     }
 
+    @SuppressWarnings("unused")
     fun bumpPatch() {
         patch += 1
 
