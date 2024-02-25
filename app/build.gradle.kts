@@ -154,12 +154,6 @@ class Version(private var code: Int, version: String) {
     fun getCode(): Int = code
 }
 
-tasks.register("helloWorld") {
-    doFirst {
-        println("Hello World!")
-    }
-}
-
 tasks.addRule("Pattern: bump<TYPE>Version") {
     if (this.matches(Regex("bump(Major|Minor|Patch)Version"))) {
         task(this) {
