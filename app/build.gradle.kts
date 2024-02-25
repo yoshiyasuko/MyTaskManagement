@@ -195,3 +195,15 @@ tasks.addRule("Pattern: bump<TYPE>Version") {
         }
     }
 }
+
+tasks.register("printVersionCode") {
+    doLast {
+        println(android.defaultConfig.versionCode)
+    }
+}
+
+tasks.register("printVersionName") {
+    doLast {
+        println(android.defaultConfig.versionName)
+    }
+}
