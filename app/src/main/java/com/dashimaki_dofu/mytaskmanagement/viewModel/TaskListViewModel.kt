@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.repository.TaskSubjectRepository
+import com.google.firebase.appdistribution.ktx.appDistribution
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +25,7 @@ abstract class TaskListViewModel : ViewModel() {
     abstract val taskSubjects: StateFlow<List<TaskSubject>>
 
     open fun fetchTaskSubjects() = Unit
+    open fun showFeedbackSend() = Unit
 }
 
 @HiltViewModel
@@ -36,6 +39,10 @@ class TaskListViewModelImpl @Inject constructor(
         viewModelScope.launch {
             _taskSubjects.value = taskSubjectRepository.getAllTaskSubjects()
         }
+    }
+
+    override fun showFeedbackSend() {
+        Firebase.appDistribution.startFeedback("フィードバックを送信")
     }
 }
 
