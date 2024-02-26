@@ -15,7 +15,7 @@ import com.dashimaki_dofu.mytaskmanagement.ui.theme.MyTaskManagementTheme
 import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModelImpl
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskEditViewModelImpl
-import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModelImpl
 
 
 /**
@@ -36,9 +36,9 @@ fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
             composable(
                 route = NavLinks.TaskList.route
             ) {
-                val viewModel = hiltViewModel<TaskListViewModel>()
+                val viewModel = hiltViewModel<TaskListViewModelImpl>()
                 TaskListScreen(
-                    taskListViewModel = viewModel,
+                    viewModel = viewModel,
                     onClickItem = { taskId ->
                         navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
                     },
