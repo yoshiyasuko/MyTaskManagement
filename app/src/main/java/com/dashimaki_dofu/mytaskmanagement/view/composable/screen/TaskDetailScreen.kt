@@ -218,6 +218,7 @@ fun TaskDetailScreen(
                             confirmButton = {
                                 TextButton(
                                     onClick = {
+                                        viewModel.dismissDeleteAlertDialog()
                                         viewModel.deleteTask(
                                             taskSubject.task.id,
                                             completion = onDeleteCompleted

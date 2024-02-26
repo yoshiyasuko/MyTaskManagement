@@ -1,6 +1,10 @@
 name: Increment Minor Version
 
-on: [ workflow_dispatch ]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - release
 
 jobs:
   build:
