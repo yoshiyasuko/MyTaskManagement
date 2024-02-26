@@ -22,10 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.view.composable.TaskList
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModelMock
 
 
 /**
@@ -34,32 +33,19 @@ import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel
  * Created by Yoshiyasu on 2024/02/10
  */
 
-@Composable
-fun TaskListScreen(
-    taskListViewModel: TaskListViewModel,
-    onClickItem: (id: Int) -> Unit,
-    onClickAddTaskButton: () -> Unit
-) {
-    val taskSubjects = taskListViewModel.taskSubjects.collectAsState(initial = emptyList())
-
-    LaunchedEffect(Unit) {
-        taskListViewModel.fetchTaskSubjects()
-    }
-
-    TaskListScreen(
-        taskSubjects = taskSubjects.value,
-        onClickItem = onClickItem,
-        onClickAddTaskButton = onClickAddTaskButton
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskListScreen(
-    taskSubjects: List<TaskSubject>,
+    viewModel: TaskListViewModel,
     onClickItem: (id: Int) -> Unit,
     onClickAddTaskButton: () -> Unit
 ) {
+    val taskSubjects = viewModel.taskSubjects.collectAsState().value
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchTaskSubjects()
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -110,11 +96,12 @@ fun TaskListScreen(
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun TaskListScreenPreview() {
     TaskListScreen(
-        taskSubjects = makeDummyTaskSubjects(),
+        viewModel = TaskListViewModelMock(),
         onClickItem = {},
         onClickAddTaskButton = {}
     )

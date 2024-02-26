@@ -38,7 +38,7 @@ fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
             ) {
                 val viewModel = hiltViewModel<TaskListViewModelImpl>()
                 TaskListScreen(
-                    taskListViewModel = viewModel,
+                    viewModel = viewModel,
                     onClickItem = { taskId ->
                         navController.navigate(NavLinks.TaskDetail.createRoute(taskId))
                     },
