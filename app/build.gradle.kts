@@ -19,8 +19,8 @@ android {
         applicationId = "com.dashimaki_dofu.mytaskmanagement"
         minSdk = 29
         targetSdk = 34
-        versionCode = 5
-        versionName = "0.4.0"
+        versionCode = 6
+        versionName = "0.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -111,8 +111,6 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
     implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
     implementation("com.google.firebase:firebase-analytics-ktx:21.5.1")
-    implementation("com.google.firebase:firebase-appdistribution-api-ktx:16.0.0-beta12")
-    implementation("com.google.firebase:firebase-appdistribution:16.0.0-beta12")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
