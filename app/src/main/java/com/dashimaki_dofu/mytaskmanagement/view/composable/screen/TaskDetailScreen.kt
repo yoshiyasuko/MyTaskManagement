@@ -157,14 +157,12 @@ fun TaskDetailScreen(
                                 .padding(all = 20.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Row {
-                                Text(
-                                    text = "締切: ${taskSubject.task.formattedDeadLineString}",
-                                    color = Color.Red,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 28.sp
-                                )
-                            }
+                            Text(
+                                text = "締切: ${taskSubject.task.formattedDeadLineDetailString}",
+                                color = Color.Red,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 28.sp
+                            )
                             Spacer(modifier = Modifier.height(10.dp))
 
                             if (taskSubject.subTasks.isEmpty()) {

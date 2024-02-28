@@ -30,7 +30,8 @@ fun makeDummyTask(taskId: Int): Task {
             1 -> TaskColor.RED.code
             else -> TaskColor.BLUE.code
         },
-        deadline = Instant.now()
+        deadlineDate = Instant.now(),
+        deadlineTime = null
     )
 }
 
