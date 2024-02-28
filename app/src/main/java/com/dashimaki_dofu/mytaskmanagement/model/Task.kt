@@ -36,6 +36,14 @@ data class Task(
             } ?: ""
         }
 
+    val formattedDeadLineDetailString: String
+        get() {
+            return deadlineTime?.let {
+                val formatter = DateTimeFormatter.ofPattern("HH:mm")
+                it.format(formatter)
+            } ?: ""
+        }
+
     val color: Color
         get() {
             return Color(colorValue)

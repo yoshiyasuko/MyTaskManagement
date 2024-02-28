@@ -2,9 +2,11 @@ package com.dashimaki_dofu.mytaskmanagement.view.composable.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,6 +37,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -50,6 +53,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dashimaki_dofu.mytaskmanagement.model.SubTaskStatus
+import com.dashimaki_dofu.mytaskmanagement.view.composable.TimePickerDialog
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskEditViewModel
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskEditViewModelMock
 import java.time.Instant
@@ -75,6 +79,7 @@ fun TaskEditScreen(
     val subTasks = viewModel.subTaskStateList.collectAsState()
 
     val showDatePickerState = viewModel.showDatePickerState.collectAsState()
+    val showTimePickerState = viewModel.showTimePickerState.collectAsState()
     val showSaveErrorDialogState = viewModel.showAlertDialogState.collectAsState()
 
     val datePickerState = rememberDatePickerState(
@@ -85,6 +90,7 @@ fun TaskEditScreen(
             .toEpochSecond(ZoneOffset.UTC)
             .times(1000)
     )
+    val timePickerState = rememberTimePickerState()
 
     LaunchedEffect(Unit) {
         viewModel.loadTaskSubject(taskId)
@@ -181,6 +187,40 @@ fun TaskEditScreen(
                                 onValueChange = {}
                             )
                         }
+                        Text(
+                            modifier = Modifier
+                                .padding(bottom = 4.dp),
+                            text = "締切時間"
+                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            TextField(
+                                modifier = Modifier
+                                    .clickable {
+                                        viewModel.showTimePicker()
+                                    }
+                                    .weight(1f),
+                                singleLine = true,
+                                enabled = false,
+                                value = task.value.formattedDeadlineTimeString,
+                                onValueChange = {}
+                            )
+                            IconButton(
+                                modifier = Modifier
+                                    .size(48.dp),
+                                onClick = { viewModel.clearTaskDeadlineTime() }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "delete deadline time"
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
                         Button(
                             modifier = Modifier
                                 .padding(bottom = 16.dp),
@@ -220,6 +260,35 @@ fun TaskEditScreen(
                             ) {
                                 DatePicker(state = datePickerState)
                             }
+                        }
+
+                        if (showTimePickerState.value) {
+                            TimePickerDialog(
+                                timePickerState = timePickerState,
+                                onDismissRequest = { viewModel.dismissTimePicker() },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.dismissTimePicker()
+                                            viewModel.updateTaskDeadlineTime(
+                                                timePickerState.hour,
+                                                timePickerState.minute
+                                            )
+                                        }
+                                    ) {
+                                        Text(text = "決定")
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.dismissTimePicker()
+                                        }
+                                    ) {
+                                        Text(text = "キャンセル")
+                                    }
+                                }
+                            )
                         }
 
                         if (showSaveErrorDialogState.value) {
