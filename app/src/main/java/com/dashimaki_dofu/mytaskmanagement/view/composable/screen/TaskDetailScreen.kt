@@ -158,7 +158,7 @@ fun TaskDetailScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "締切: ${taskSubject.task.formattedDeadLineString}",
+                                text = "締切: ${taskSubject.task.formattedDeadLineDetailString}",
                                 color = Color.Red,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp
