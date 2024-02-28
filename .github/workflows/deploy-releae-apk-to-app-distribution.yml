@@ -41,4 +41,17 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: release
+          releaseNotesFile: RELEASE_NOTE.md
           file: ./app/build/outputs/apk/release/app-release.apk
+
+      - name: Init RELEASE_NOTE.md
+        run: cat RELEASE_NOTE.init.md > RELEASE_NOTE.md
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: init-release-note
+          base: release
+          title: "docs: ✏️ init RELEASE_NOTE.md"
+          commit-message: "docs: ✏️ init RELEASE_NOTE.md"
