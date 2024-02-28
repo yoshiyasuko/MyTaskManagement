@@ -20,7 +20,7 @@ const val defaultId = 0
 @Database(
     entities = [Task::class, SubTask::class],
     version = roomSchemaVersion,
-    exportSchema = false
+    exportSchema = true
 )
 @TypeConverters(DateConverter::class)
 abstract class TaskDatabase : RoomDatabase() {
