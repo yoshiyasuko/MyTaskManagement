@@ -19,11 +19,6 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
-
       - name: Grant Permission gradlew
         run: chmod +x gradlew
 
