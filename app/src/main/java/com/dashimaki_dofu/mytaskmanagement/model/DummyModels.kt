@@ -2,6 +2,7 @@ package com.dashimaki_dofu.mytaskmanagement.model
 
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.TaskColor
 import java.time.Instant
+import java.time.LocalTime
 
 
 /**
@@ -30,7 +31,8 @@ fun makeDummyTask(taskId: Int): Task {
             1 -> TaskColor.RED.code
             else -> TaskColor.BLUE.code
         },
-        deadline = Instant.now()
+        deadlineDate = Instant.now(),
+        deadlineTime = LocalTime.of(0, 0, 0)
     )
 }
 

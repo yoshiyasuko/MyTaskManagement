@@ -33,23 +33,23 @@ abstract class TaskEditViewModel : ViewModel() {
         data class TaskState(
             var id: Int = defaultId,
             var title: String = "",
-            var deadline: Instant? = null,
+            var deadlineDate: Instant? = null,
             var isTitleValid: Boolean = false,
             var isDeadlineValid: Boolean = false
         ) : UiState {
             constructor(task: Task) : this() {
                 id = task.id
                 title = task.title
-                deadline = task.deadline
+                deadlineDate = task.deadlineDate
                 isTitleValid = task.title.isNotEmpty()
                 isDeadlineValid = task.formattedDeadLineString.isNotEmpty()
             }
 
             val formattedDeadlineString: String
                 get() {
-                    return deadline?.let {
+                    return deadlineDate?.let {
                         val localDateTime =
-                            LocalDateTime.ofInstant(deadline, ZoneId.systemDefault())
+                            LocalDateTime.ofInstant(deadlineDate, ZoneId.systemDefault())
                         val dateFormatter = DateTimeFormatter.ofPattern("M/d")
                         dateFormatter.format(localDateTime)
                     } ?: ""
@@ -141,7 +141,7 @@ class TaskEditViewModelImpl @Inject constructor(
                 Instant.ofEpochMilli(millis)
             }
             it.copy(
-                deadline = deadlineInstant,
+                deadlineDate = deadlineInstant,
                 isDeadlineValid = deadlineInstant != null
             )
         }

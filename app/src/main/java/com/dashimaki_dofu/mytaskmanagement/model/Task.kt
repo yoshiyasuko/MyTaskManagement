@@ -13,6 +13,7 @@ import com.dashimaki_dofu.mytaskmanagement.database.defaultId
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.TaskColor
 import java.time.Instant
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -22,13 +23,14 @@ data class Task(
     @PrimaryKey(autoGenerate = true) var id: Int = defaultId,
     var title: String = "",
     var colorValue: Long = TaskColor.YELLOW.code,
-    var deadline: Instant? = null
+    var deadlineDate: Instant? = null,
+    var deadlineTime: LocalTime? = null
 ) {
     // 締切表示: "M/d"形式
     val formattedDeadLineString: String
         get() {
-            return deadline?.let {
-                val localDateTime = LocalDateTime.ofInstant(deadline, ZoneId.systemDefault())
+            return deadlineDate?.let {
+                val localDateTime = LocalDateTime.ofInstant(deadlineDate, ZoneId.systemDefault())
                 val formatter = DateTimeFormatter.ofPattern("M/d")
                 formatter.format(localDateTime)
             } ?: ""
