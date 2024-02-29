@@ -6,6 +6,8 @@
     <string name="common.save">保存</string>
     <string name="common.decide">決定</string>
     
+    <string name="common.timePicker.title">時間を選択してください</string>
+    
     <string name="subTask.status.incomplete">未着手</string>
     <string name="subTask.status.active">着手中</string>
     <string name="subTask.status.completed">完了</string>
