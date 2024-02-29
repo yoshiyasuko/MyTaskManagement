@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -33,25 +34,35 @@ abstract class TaskEditViewModel : ViewModel() {
         data class TaskState(
             var id: Int = defaultId,
             var title: String = "",
-            var deadline: Instant? = null,
+            var deadlineDate: Instant? = null,
+            var deadlineTime: LocalTime? = null,
             var isTitleValid: Boolean = false,
             var isDeadlineValid: Boolean = false
         ) : UiState {
             constructor(task: Task) : this() {
                 id = task.id
                 title = task.title
-                deadline = task.deadline
+                deadlineDate = task.deadlineDate
+                deadlineTime = task.deadlineTime
                 isTitleValid = task.title.isNotEmpty()
                 isDeadlineValid = task.formattedDeadLineString.isNotEmpty()
             }
 
             val formattedDeadlineString: String
                 get() {
-                    return deadline?.let {
+                    return deadlineDate?.let {
                         val localDateTime =
-                            LocalDateTime.ofInstant(deadline, ZoneId.systemDefault())
+                            LocalDateTime.ofInstant(deadlineDate, ZoneId.systemDefault())
                         val dateFormatter = DateTimeFormatter.ofPattern("M/d")
                         dateFormatter.format(localDateTime)
+                    } ?: ""
+                }
+
+            val formattedDeadlineTimeString: String
+                get() {
+                    return deadlineTime?.let {
+                        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+                        it.format(formatter)
                     } ?: ""
                 }
         }
@@ -80,11 +91,14 @@ abstract class TaskEditViewModel : ViewModel() {
         mutableListOf()
     )
     open val showDatePickerState: StateFlow<Boolean> = MutableStateFlow(false)
+    open val showTimePickerState: StateFlow<Boolean> = MutableStateFlow(false)
     open val showAlertDialogState: StateFlow<Boolean> = MutableStateFlow(false)
 
     open fun loadTaskSubject(taskId: Int?) = Unit
     open fun updateTaskTitle(title: String) = Unit
     open fun updateTaskDeadline(dateMillis: Long?) = Unit
+    open fun updateTaskDeadlineTime(hour: Int, minute: Int) = Unit
+    open fun clearTaskDeadlineTime() = Unit
     open fun saveTask(completion: (() -> Unit)?) = Unit
     open fun addSubTaskItem() = Unit
     open fun deleteSubTaskItem(index: Int) = Unit
@@ -93,6 +107,8 @@ abstract class TaskEditViewModel : ViewModel() {
 
     open fun showDatePicker() = Unit
     open fun dismissDatePicker() = Unit
+    open fun showTimePicker() = Unit
+    open fun dismissTimePicker() = Unit
     open fun showAlertDialog() = Unit
     open fun dismissAlertDialog() = Unit
 }
@@ -109,6 +125,9 @@ class TaskEditViewModelImpl @Inject constructor(
 
     private val _showDatePickerState = MutableStateFlow(false)
     override val showDatePickerState = _showDatePickerState.asStateFlow()
+
+    private val _showTimePickerState = MutableStateFlow(false)
+    override val showTimePickerState = _showTimePickerState.asStateFlow()
 
     private val _showAlertDialogState = MutableStateFlow(false)
     override val showAlertDialogState = _showAlertDialogState.asStateFlow()
@@ -141,8 +160,24 @@ class TaskEditViewModelImpl @Inject constructor(
                 Instant.ofEpochMilli(millis)
             }
             it.copy(
-                deadline = deadlineInstant,
+                deadlineDate = deadlineInstant,
                 isDeadlineValid = deadlineInstant != null
+            )
+        }
+    }
+
+    override fun updateTaskDeadlineTime(hour: Int, minute: Int) {
+        _taskState.update {
+            it.copy(
+                deadlineTime = LocalTime.of(hour, minute)
+            )
+        }
+    }
+
+    override fun clearTaskDeadlineTime() {
+        _taskState.update {
+            it.copy(
+                deadlineTime = null
             )
         }
     }
@@ -153,7 +188,9 @@ class TaskEditViewModelImpl @Inject constructor(
             val task = Task()
             task.id = _taskState.value.id
             task.title = _taskState.value.title
-            task.deadline = _taskState.value.deadline
+            task.deadlineDate = _taskState.value.deadlineDate
+            task.deadlineTime = _taskState.value.deadlineTime
+
             val taskId = taskSubjectRepository.saveTask(task)
 
             // 子課題を登録する
@@ -215,12 +252,20 @@ class TaskEditViewModelImpl @Inject constructor(
         _showDatePickerState.value = true
     }
 
+    override fun showTimePicker() {
+        _showTimePickerState.value = true
+    }
+
     override fun showAlertDialog() {
         _showAlertDialogState.value = true
     }
 
     override fun dismissDatePicker() {
         _showDatePickerState.value = false
+    }
+
+    override fun dismissTimePicker() {
+        _showTimePickerState.value = false
     }
 
     override fun dismissAlertDialog() {
