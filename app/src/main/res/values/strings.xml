@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">課題管理</string>
     
+    <string name="common.ok">OK</string>
+    <string name="common.cancel">キャンセル</string>
+    
     <string name="subTask.status.incomplete">未着手</string>
     <string name="subTask.status.active">着手中</string>
     <string name="subTask.status.completed">完了</string>
+    
+    <string name="taskDetail.deadline">締切: %s</string>
+    <string name="taskDetail.emptySubTask">子課題がありません\n右上の編集ボタンから子課題を登録しましょう</string>
+    <string name="taskDetail.alertDeleteDialog.confirmTitle">%sを削除します。よろしいですか？</string>
+    <string name="taskDetail.alertDeleteDialog.confirmMessage">この操作は元に戻せません。</string>
 </resources>
