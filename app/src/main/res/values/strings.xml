@@ -10,6 +10,10 @@
     <string name="subTask.status.active">着手中</string>
     <string name="subTask.status.completed">完了</string>
     
+    <string name="taskList.title">課題</string>
+    <string name="taskList.emptyTask">課題がありません。\n右上の+ボタンから課題を登録してください。</string>
+    <string name="taskList.deadlineDate">締切</string>
+    
     <string name="taskDetail.deadline">締切: %s</string>
     <string name="taskDetail.emptySubTask">子課題がありません\n右上の編集ボタンから子課題を登録しましょう</string>
     <string name="taskDetail.alertDeleteDialog.confirmTitle">%sを削除します。よろしいですか？</string>
