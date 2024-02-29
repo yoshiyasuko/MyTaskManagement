@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.dashimaki_dofu.mytaskmanagement.R
 
 
 /**
@@ -65,7 +67,7 @@ fun TimePickerDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 20.dp),
-                    text = "時間を選択してください",
+                    text = stringResource(id = R.string.common_timePicker_title),
                     style = MaterialTheme.typography.labelMedium
                 )
                 TimePicker(state = timePickerState)

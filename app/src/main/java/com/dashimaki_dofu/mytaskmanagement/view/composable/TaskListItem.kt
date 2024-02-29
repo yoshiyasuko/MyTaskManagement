@@ -20,12 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 
@@ -101,7 +103,7 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
                     ) {
                         Text(
                             textAlign = TextAlign.Center,
-                            text = "締切",
+                            text = stringResource(id = R.string.taskList_deadlineDate),
                             fontSize = 12.sp
                         )
                         Text(

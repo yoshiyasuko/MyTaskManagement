@@ -19,9 +19,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.view.composable.TaskList
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModelMock
@@ -54,7 +56,7 @@ fun TaskListScreen(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text("課題")
+                        Text(text = stringResource(id = R.string.taskList_title))
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -74,7 +76,8 @@ fun TaskListScreen(
             }
         ) { innerPadding ->
             Box(
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier
+                    .padding(innerPadding)
                     .fillMaxSize()
             ) {
                 if (taskSubjects.isEmpty()) {
@@ -83,7 +86,7 @@ fun TaskListScreen(
                             .align(Alignment.Center)
                             .padding(horizontal = 8.dp),
                         textAlign = TextAlign.Center,
-                        text = "課題がありません。\n右上の+ボタンから課題を登録してください。"
+                        text = stringResource(id = R.string.taskList_emptyTask)
                     )
                 } else {
                     TaskList(
