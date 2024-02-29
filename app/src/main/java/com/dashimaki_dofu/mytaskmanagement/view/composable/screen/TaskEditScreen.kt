@@ -53,6 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.model.SubTaskStatus
 import com.dashimaki_dofu.mytaskmanagement.view.composable.TimePickerDialog
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskEditViewModel
@@ -105,7 +106,15 @@ fun TaskEditScreen(
             topBar = {
                 TopAppBar(
                     title = {
-                        Text(text = if (taskId == null) "課題の追加" else "課題の編集")
+                        Text(
+                            text = stringResource(
+                                id = if (taskId == null) {
+                                    R.string.taskEdit_title_create
+                                } else {
+                                    R.string.taskEdit_title_edit
+                                }
+                            )
+                        )
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -134,7 +143,7 @@ fun TaskEditScreen(
                                 }
                             }
                         ) {
-                            Text(text = "保存")
+                            Text(text = stringResource(id = R.string.common_save))
                         }
                     }
                 )
@@ -154,7 +163,7 @@ fun TaskEditScreen(
                         Text(
                             modifier = Modifier
                                 .padding(bottom = 4.dp),
-                            text = "課題タイトル"
+                            text = stringResource(id = R.string.taskEdit_input_taskTitle)
                         )
                         TextField(
                             modifier = Modifier
@@ -169,7 +178,7 @@ fun TaskEditScreen(
                         Text(
                             modifier = Modifier
                                 .padding(bottom = 4.dp),
-                            text = "締切日"
+                            text = stringResource(id = R.string.taskEdit_input_deadlineDate)
                         )
                         Box(
                             modifier = Modifier
@@ -191,7 +200,7 @@ fun TaskEditScreen(
                         Text(
                             modifier = Modifier
                                 .padding(bottom = 4.dp),
-                            text = "締切時間"
+                            text = stringResource(id = R.string.taskEdit_input_deadlineTime)
                         )
                         Row(
                             modifier = Modifier
@@ -232,7 +241,7 @@ fun TaskEditScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(horizontal = 8.dp, vertical = 4.dp),
-                                text = "子課題を追加"
+                                text = stringResource(id = R.string.taskEdit_addSubTaskButton)
                             )
                         }
 
@@ -246,7 +255,7 @@ fun TaskEditScreen(
                                             viewModel.updateTaskDeadline(datePickerState.selectedDateMillis)
                                         }
                                     ) {
-                                        Text(text = "決定")
+                                        Text(text = stringResource(id = R.string.common_decide))
                                     }
                                 },
                                 dismissButton = {
@@ -255,7 +264,7 @@ fun TaskEditScreen(
                                             viewModel.dismissDatePicker()
                                         }
                                     ) {
-                                        Text(text = "キャンセル")
+                                        Text(text = stringResource(id = R.string.common_cancel))
                                     }
                                 }
                             ) {
@@ -277,7 +286,7 @@ fun TaskEditScreen(
                                             )
                                         }
                                     ) {
-                                        Text(text = "決定")
+                                        Text(text = stringResource(id = R.string.common_decide))
                                     }
                                 },
                                 dismissButton = {
@@ -286,7 +295,7 @@ fun TaskEditScreen(
                                             viewModel.dismissTimePicker()
                                         }
                                     ) {
-                                        Text(text = "キャンセル")
+                                        Text(text = stringResource(id = R.string.common_cancel))
                                     }
                                 }
                             )
@@ -303,23 +312,36 @@ fun TaskEditScreen(
                                             viewModel.dismissAlertDialog()
                                         }
                                     ) {
-                                        Text(text = "OK")
+                                        Text(text = stringResource(id = R.string.common_ok))
                                     }
                                 },
                                 title = {
-                                    Text(text = "保存できませんでした")
+                                    Text(text = stringResource(id = R.string.taskEdit_saveTaskErrorDialog_title))
                                 },
                                 text = {
                                     Column {
                                         if (!task.value.isTitleValid) {
-                                            Text(text = "課題タイトルを入力してください")
+                                            Text(
+                                                text = stringResource(
+                                                    id = R.string.taskEdit_saveTaskErrorDialog_taskTitleNotValid
+                                                )
+                                            )
                                         }
                                         if (!task.value.isDeadlineValid) {
-                                            Text(text = "締切日を入力してください")
+                                            Text(
+                                                text = stringResource(
+                                                    id = R.string.taskEdit_saveTaskErrorDialog_taskDeadlineDateNotValid
+                                                )
+                                            )
                                         }
                                         subTasks.value.forEachIndexed { index, subTask ->
                                             if (!subTask.isValid) {
-                                                Text(text = "子課題${index + 1}のタイトルが入力されていません")
+                                                Text(
+                                                    text = stringResource(
+                                                        id = R.string.taskEdit_saveTaskErrorDialog_subTaskTitleNotValid,
+                                                        index + 1
+                                                    )
+                                                )
                                             }
                                         }
                                     }
@@ -367,7 +389,10 @@ fun SubTaskEditItem(
         Text(
             modifier = Modifier
                 .padding(bottom = 4.dp),
-            text = "子課題${index + 1}"
+            text = stringResource(
+                id = R.string.taskEdit_subTask_title,
+                index + 1
+            )
         )
         Row(
             modifier = Modifier
@@ -399,7 +424,7 @@ fun SubTaskEditItem(
                             }
                         ) {
                             Text(
-                                text = "着手中",
+                                text = stringResource(id = R.string.subTask_status_active),
                                 fontSize = 10.sp
                             )
                         }
