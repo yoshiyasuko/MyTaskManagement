@@ -1,6 +1,7 @@
 package com.dashimaki_dofu.mytaskmanagement.model
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -34,8 +35,11 @@ data class SubTask(
     var status: SubTaskStatus = SubTaskStatus.INCOMPLETE
 )
 
-enum class SubTaskStatus(@DrawableRes val stampResourceId: Int?, val text: String) {
-    INCOMPLETE(R.drawable.mark_incomplete_checked, "未着手"), // 未着手
-    ACTIVE(null, "着手中"),     // 着手中
-    COMPLETED(R.drawable.mark_sumi_checked, "完了");  // 完了
+enum class SubTaskStatus(
+    @DrawableRes val stampResourceId: Int?,
+    @StringRes val stringResourceId: Int
+) {
+    INCOMPLETE(R.drawable.mark_incomplete_checked, R.string.subTask_status_incomplete), // 未着手
+    ACTIVE(null, R.string.subTask_status_active),     // 着手中
+    COMPLETED(R.drawable.mark_sumi_checked, R.string.subTask_status_completed);  // 完了
 }

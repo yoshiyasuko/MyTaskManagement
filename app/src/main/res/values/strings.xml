@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">課題管理</string>
+    
+    <string name="subTask.status.incomplete">未着手</string>
+    <string name="subTask.status.active">着手中</string>
+    <string name="subTask.status.completed">完了</string>
 </resources>
