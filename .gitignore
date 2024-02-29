@@ -319,6 +319,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+service_credentials_content.json
+
 ### AndroidStudio Patch ###
 
 !/gradle/wrapper/gradle-wrapper.jar
