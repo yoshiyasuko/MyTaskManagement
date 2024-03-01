@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">課題管理</string>
+    
+    <string name="common.ok">OK</string>
+    <string name="common.cancel">キャンセル</string>
+    <string name="common.save">保存</string>
+    <string name="common.decide">決定</string>
+    
+    <string name="common.feedback.send">フィードバックを送信</string>
+    <string name="common.feedback.screenMessage">何か意見があったら教えてー！(*´▽｀*)</string>
+    
+    <string name="common.timePicker.title">時間を選択してください</string>
+    
+    <string name="subTask.status.incomplete">未着手</string>
+    <string name="subTask.status.active">着手中</string>
+    <string name="subTask.status.completed">完了</string>
+    
+    <string name="taskList.title">課題</string>
+    <string name="taskList.emptyTask">課題がありません。\n右上の+ボタンから課題を登録してください。</string>
+    <string name="taskList.deadlineDate">締切</string>
+    
+    <string name="taskDetail.deadline">締切: %s</string>
+    <string name="taskDetail.emptySubTask">子課題がありません\n右上の編集ボタンから子課題を登録しましょう</string>
+    <string name="taskDetail.alertDeleteDialog.confirmTitle">%sを削除します。よろしいですか？</string>
+    <string name="taskDetail.alertDeleteDialog.confirmMessage">この操作は元に戻せません。</string>
+
+    <string name="taskEdit.title.create">課題の追加</string>
+    <string name="taskEdit.title.edit">課題の編集</string>
+    <string name="taskEdit.input.taskTitle">課題タイトル</string>
+    <string name="taskEdit.input.deadlineDate">締切日</string>
+    <string name="taskEdit.input.deadlineTime">締切時間</string>
+    <string name="taskEdit.addSubTaskButton">子課題を追加</string>
+    <string name="taskEdit.saveTaskErrorDialog.title">保存できませんでした</string>
+    <string name="taskEdit.saveTaskErrorDialog.taskTitleNotValid">課題タイトルを入力してください</string>
+    <string name="taskEdit.saveTaskErrorDialog.taskDeadlineDateNotValid">締切日を入力してください</string>
+    <string name="taskEdit.saveTaskErrorDialog.subTaskTitleNotValid">子課題%dのタイトルが入力されていません</string>
+    <string name="taskEdit.subTask.title">子課題%d</string>
 </resources>
