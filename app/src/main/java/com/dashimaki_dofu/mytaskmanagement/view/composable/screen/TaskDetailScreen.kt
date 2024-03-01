@@ -42,12 +42,14 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.database.defaultId
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
@@ -158,7 +160,10 @@ fun TaskDetailScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "締切: ${taskSubject.task.formattedDeadLineDetailString}",
+                                text = stringResource(
+                                    id = R.string.taskDetail_deadline,
+                                    taskSubject.task.formattedDeadLineDetailString
+                                ),
                                 color = Color.Red,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 28.sp
@@ -169,7 +174,7 @@ fun TaskDetailScreen(
                                 Text(
                                     modifier = Modifier
                                         .fillMaxWidth(),
-                                    text = "子課題がありません\n右上の編集ボタンから子課題を登録しましょう",
+                                    text = stringResource(id = R.string.taskDetail_emptySubTask),
                                     textAlign = TextAlign.Center
                                 )
                             } else {
@@ -223,7 +228,7 @@ fun TaskDetailScreen(
                                         )
                                     }
                                 ) {
-                                    Text(text = "OK")
+                                    Text(text = stringResource(id = R.string.common_ok))
                                 }
                             },
                             dismissButton = {
@@ -232,14 +237,19 @@ fun TaskDetailScreen(
                                         viewModel.dismissDeleteAlertDialog()
                                     }
                                 ) {
-                                    Text(text = "キャンセル")
+                                    Text(text = stringResource(id = R.string.common_cancel))
                                 }
                             },
                             title = {
-                                Text(text = "${taskSubject.task.title}を削除します。よろしいですか？")
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.taskDetail_alertDeleteDialog_confirmTitle,
+                                        taskSubject.task.title
+                                    )
+                                )
                             },
                             text = {
-                                Text(text = "この操作は元に戻せません。")
+                                Text(text = stringResource(id = R.string.taskDetail_alertDeleteDialog_confirmMessage))
                             }
                         )
                     }
@@ -273,7 +283,7 @@ fun SubTaskListItem(subTask: SubTask) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (val resourceId = subTask.status.stampResourceId) {
-                null -> Text(text = "着手中")
+                null -> Text(text = stringResource(id = R.string.subTask_status_active))
                 else -> Image(
                     painter = painterResource(id = resourceId),
                     contentDescription = null,
