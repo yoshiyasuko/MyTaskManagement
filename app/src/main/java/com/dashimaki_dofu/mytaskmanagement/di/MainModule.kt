@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.dashimaki_dofu.mytaskmanagement.database.TaskDatabase
 import com.dashimaki_dofu.mytaskmanagement.database.TaskSubjectDao
+import com.google.firebase.appdistribution.FirebaseAppDistribution
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,5 +42,11 @@ object MainModule {
         db: TaskDatabase
     ): TaskSubjectDao {
         return db.taskSubjectDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDistribution() : FirebaseAppDistribution{
+        return FirebaseAppDistribution.getInstance()
     }
 }
