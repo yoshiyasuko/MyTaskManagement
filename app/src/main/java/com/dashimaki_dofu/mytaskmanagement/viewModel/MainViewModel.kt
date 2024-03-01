@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
+import com.dashimaki_dofu.mytaskmanagement.util.AppDistributionUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +19,9 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val appDistributionUtil: AppDistributionUtil
+) : ViewModel() {
     private val _loading = MutableStateFlow(true)
     val loading = _loading.asStateFlow()
 
@@ -30,5 +33,9 @@ class MainViewModel @Inject constructor() : ViewModel() {
             taskSubjects = makeDummyTaskSubjects()
             _loading.value = false
         }
+    }
+
+    fun updateIfNewReleaseAvailable() {
+        appDistributionUtil.updateIfNewReleaseAvailable()
     }
 }

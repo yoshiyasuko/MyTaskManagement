@@ -36,4 +36,10 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        // アプリが起動 or バックグラウンドから復帰する度にアップデートチェックを行う
+        viewModel.updateIfNewReleaseAvailable()
+    }
 }
