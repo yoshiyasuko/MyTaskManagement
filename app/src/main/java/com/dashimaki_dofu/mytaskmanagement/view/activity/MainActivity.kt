@@ -28,10 +28,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyTaskManagementApp(
                 onClickSendFeedback = {
-                    Firebase.appDistribution.startFeedback(
-                        R.string.common_feedback_screenMessage,
-                        null
-                    )
+                    // FIXME: フィードバック送信機能。
+                    //  ここのデフォルトスクリーンショットはoffにしたい。
+                    //  第2引数のUriはスクリーンショットBitmapへのリンクを示していて、
+                    //  メソッドのドキュメントには「ここをnullにすればデフォルトスクリーンショットをoffにできるよ」
+                    //  と書いてあるが、nullにするとUri.getScheme()でNullPointerExceptionでクラッシュしてしまい機能しない。
+                    //  現状これを抑制する方法が思い付かないため、第2引数に何も渡さずデフォルトスクリーンショットをonにしている。
+                    Firebase
+                        .appDistribution
+                        .startFeedback(R.string.common_feedback_screenMessage)
                 }
             )
         }
