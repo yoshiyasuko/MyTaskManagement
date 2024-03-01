@@ -3,8 +3,12 @@ package com.dashimaki_dofu.mytaskmanagement.view.composable.screen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,8 +21,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,9 +49,12 @@ import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModelMock
 fun TaskListScreen(
     viewModel: TaskListViewModel,
     onClickItem: (id: Int) -> Unit,
-    onClickAddTaskButton: () -> Unit
+    onClickAddTaskButton: () -> Unit,
+    onClickSendFeedback: () -> Unit
 ) {
     val taskSubjects = viewModel.taskSubjects.collectAsState().value
+
+    var feedbackMenuExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.fetchTaskSubjects()
@@ -69,6 +81,34 @@ fun TaskListScreen(
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = "go back"
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                feedbackMenuExpanded = !feedbackMenuExpanded
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "feedback"
+                            )
+                        }
+                        DropdownMenu(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(16.dp)),
+                            expanded = feedbackMenuExpanded,
+                            onDismissRequest = {
+                                feedbackMenuExpanded = false
+                            }
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = stringResource(id = R.string.common_feedback_send))
+                                },
+                                onClick = {
+                                    onClickSendFeedback.invoke()
+                                    feedbackMenuExpanded = false
+                                }
                             )
                         }
                     }
@@ -106,6 +146,7 @@ fun TaskListScreenPreview() {
     TaskListScreen(
         viewModel = TaskListViewModelMock(),
         onClickItem = {},
-        onClickAddTaskButton = {}
+        onClickAddTaskButton = {},
+        onClickSendFeedback = {}
     )
 }

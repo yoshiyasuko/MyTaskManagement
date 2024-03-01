@@ -1,18 +1,14 @@
 package com.dashimaki_dofu.mytaskmanagement.view.composable.screen
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.dashimaki_dofu.mytaskmanagement.NavLinks
-import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.ui.theme.MyTaskManagementTheme
-import com.dashimaki_dofu.mytaskmanagement.viewModel.MainViewModel
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModelImpl
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskEditViewModelImpl
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModelImpl
@@ -25,7 +21,9 @@ import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModelImpl
  */
 
 @Composable
-fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
+fun MyTaskManagementApp(
+    onClickSendFeedback: () -> Unit
+) {
     MyTaskManagementTheme {
         val navController = rememberNavController()
         NavHost(
@@ -44,7 +42,8 @@ fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
                     },
                     onClickAddTaskButton = {
                         navController.navigate(NavLinks.TaskCreate.route)
-                    }
+                    },
+                    onClickSendFeedback = onClickSendFeedback
                 )
             }
 
@@ -114,12 +113,4 @@ fun MyTaskManagementApp(mainViewModel: MainViewModel = viewModel()) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MyTaskManagementAppPreview() {
-    val mainViewModel = MainViewModel()
-    mainViewModel.taskSubjects = makeDummyTaskSubjects()
-    MyTaskManagementApp(mainViewModel)
 }
