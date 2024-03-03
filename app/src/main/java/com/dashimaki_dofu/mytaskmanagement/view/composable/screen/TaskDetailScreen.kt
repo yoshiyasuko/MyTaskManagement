@@ -50,7 +50,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dashimaki_dofu.mytaskmanagement.R
-import com.dashimaki_dofu.mytaskmanagement.R.string
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel
@@ -239,7 +238,7 @@ fun TaskDetailScreen(
                                             )
                                         }
                                     ) {
-                                        Text(text = stringResource(id = string.common_ok))
+                                        Text(text = stringResource(id = R.string.common_ok))
                                     }
                                 },
                                 dismissButton = {
@@ -248,19 +247,19 @@ fun TaskDetailScreen(
                                             viewModel.dismissDeleteAlertDialog()
                                         }
                                     ) {
-                                        Text(text = stringResource(id = string.common_cancel))
+                                        Text(text = stringResource(id = R.string.common_cancel))
                                     }
                                 },
                                 title = {
                                     Text(
                                         text = stringResource(
-                                            id = string.taskDetail_alertDeleteDialog_confirmTitle,
+                                            id = R.string.taskDetail_alertDeleteDialog_confirmTitle,
                                             taskSubject.task.title
                                         )
                                     )
                                 },
                                 text = {
-                                    Text(text = stringResource(id = string.taskDetail_alertDeleteDialog_confirmMessage))
+                                    Text(text = stringResource(id = R.string.taskDetail_alertDeleteDialog_confirmMessage))
                                 }
                             )
                         }
