@@ -120,7 +120,8 @@ class TaskEditViewModelImpl @Inject constructor(
     private val _taskState = MutableStateFlow(UiState.TaskState())
     override val taskState = _taskState.asStateFlow()
 
-    private val _subTaskStateList = MutableStateFlow<MutableList<UiState.SubTaskState>>(mutableStateListOf())
+    private val _subTaskStateList =
+        MutableStateFlow<MutableList<UiState.SubTaskState>>(mutableStateListOf())
     override val subTaskStateList = _subTaskStateList.asStateFlow()
 
     private val _showDatePickerState = MutableStateFlow(false)
