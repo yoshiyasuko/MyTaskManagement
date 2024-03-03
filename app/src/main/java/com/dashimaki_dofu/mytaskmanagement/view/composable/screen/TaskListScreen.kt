@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +36,8 @@ import androidx.compose.ui.unit.dp
 import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.view.composable.TaskList
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel.UiState.Loaded
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModel.UiState.Loading
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskListViewModelMock
 
 
@@ -52,7 +55,7 @@ fun TaskListScreen(
     onClickAddTaskButton: () -> Unit,
     onClickSendFeedback: () -> Unit
 ) {
-    val taskSubjects = viewModel.taskSubjects.collectAsState().value
+    val uiState = viewModel.uiState.collectAsState().value
 
     var feedbackMenuExpanded by remember { mutableStateOf(false) }
 
@@ -120,19 +123,31 @@ fun TaskListScreen(
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                if (taskSubjects.isEmpty()) {
-                    Text(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .padding(horizontal = 8.dp),
-                        textAlign = TextAlign.Center,
-                        text = stringResource(id = R.string.taskList_emptyTask)
-                    )
-                } else {
-                    TaskList(
-                        taskSubjects = taskSubjects,
-                        onClickItem = onClickItem
-                    )
+                when (uiState) {
+                    is Loading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .align(Alignment.Center),
+                        )
+                    }
+
+                    is Loaded -> {
+                        val taskSubjects = uiState.taskSubjects
+                        if (taskSubjects.isEmpty()) {
+                            Text(
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .padding(horizontal = 8.dp),
+                                textAlign = TextAlign.Center,
+                                text = stringResource(id = R.string.taskList_emptyTask)
+                            )
+                        } else {
+                            TaskList(
+                                taskSubjects = taskSubjects,
+                                onClickItem = onClickItem
+                            )
+                        }
+                    }
                 }
             }
         }
