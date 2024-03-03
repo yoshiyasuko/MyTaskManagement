@@ -18,7 +18,7 @@ class TaskSubject {
         fun initialize(): TaskSubject {
             return TaskSubject().also {
                 it.task = Task()
-                it.subTasks = emptyList()
+                it.subTasks = mutableListOf()
             }
         }
     }
@@ -27,7 +27,7 @@ class TaskSubject {
     lateinit var task: Task
 
     @Relation(parentColumn = "id", entityColumn = "taskId")
-    lateinit var subTasks: List<SubTask>
+    lateinit var subTasks: MutableList<SubTask>
 
     // 課題の進捗率: 完了した課題の割合
     val progressRate: Float

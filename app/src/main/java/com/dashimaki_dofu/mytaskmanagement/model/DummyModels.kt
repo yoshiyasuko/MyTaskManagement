@@ -15,7 +15,7 @@ fun makeDummyTaskSubjects(): List<TaskSubject> {
     return (1..20).map {
         val taskSubject = TaskSubject()
         taskSubject.task = makeDummyTask(it)
-        taskSubject.subTasks = makeDummySubTasks(taskId = it)
+        taskSubject.subTasks = makeDummySubTasks(taskId = it).toMutableList()
         taskSubject
     }
 }
