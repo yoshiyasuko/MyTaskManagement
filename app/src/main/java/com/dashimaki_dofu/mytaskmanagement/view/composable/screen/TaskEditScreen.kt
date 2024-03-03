@@ -136,7 +136,7 @@ fun TaskEditScreen(
                                 if (!task.value.isTitleValid ||
                                     !task.value.isDeadlineValid ||
                                     subTasks.value.any { !it.isValid }
-                                    ) {
+                                ) {
                                     viewModel.showAlertDialog()
                                 } else {
                                     viewModel.saveTask(completion = onSaveCompleted)
@@ -351,7 +351,7 @@ fun TaskEditScreen(
                         }
                     }
 
-                    itemsIndexed(subTasks.value) {index, subTaskState ->
+                    itemsIndexed(subTasks.value) { index, subTaskState ->
                         SubTaskEditItem(
                             index = index,
                             subTaskState = subTaskState,
@@ -359,7 +359,7 @@ fun TaskEditScreen(
                                 viewModel.updateSubTaskTitle(index, it)
                             },
                             onClickDeleteButton = {
-                                viewModel.deleteSubTaskItem(index,)
+                                viewModel.deleteSubTaskItem(index)
                             },
                             onStatusSelected = { selectedStatus ->
                                 viewModel.updateSubTaskStatus(index, selectedStatus)
@@ -381,7 +381,7 @@ fun SubTaskEditItem(
     onStatusSelected: (SubTaskStatus) -> Unit
 ) {
     var statusMenuExpanded by remember { mutableStateOf(false) }
-    
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -429,6 +429,7 @@ fun SubTaskEditItem(
                             )
                         }
                     }
+
                     else -> {
                         IconButton(
                             modifier = Modifier
@@ -457,10 +458,10 @@ fun SubTaskEditItem(
                             modifier = Modifier
                                 .padding(horizontal = 4.dp, vertical = 8.dp),
                             text = {
-                               Text(
-                                   text = stringResource(id = it.stringResourceId),
-                                   fontSize = 16.sp
-                               )
+                                Text(
+                                    text = stringResource(id = it.stringResourceId),
+                                    fontSize = 16.sp
+                                )
                             },
                             onClick = {
                                 onStatusSelected.invoke(it)

@@ -15,13 +15,14 @@ import com.dashimaki_dofu.mytaskmanagement.ui.theme.TaskColor
 // 「課題 : 子課題 = 1 : N」のリレーションを実現するラッパーオブジェクト
 class TaskSubject {
     companion object {
-        fun initialize() : TaskSubject {
+        fun initialize(): TaskSubject {
             return TaskSubject().also {
                 it.task = Task()
                 it.subTasks = emptyList()
             }
         }
     }
+
     @Embedded
     lateinit var task: Task
 
@@ -32,7 +33,9 @@ class TaskSubject {
     val progressRate: Float
         get() {
             if (subTasks.isEmpty()) return 0f
-            return subTasks.count { it.status == SubTaskStatus.COMPLETED } / subTasks.count().toFloat()
+            return subTasks.count { it.status == SubTaskStatus.COMPLETED } / subTasks
+                .count()
+                .toFloat()
         }
 
     val progressRateString: String

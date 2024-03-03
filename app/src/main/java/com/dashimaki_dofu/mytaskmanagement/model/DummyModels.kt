@@ -48,11 +48,13 @@ fun makeDummySubTasks(taskId: Int = 0): List<SubTask> {
                     2 -> SubTaskStatus.ACTIVE
                     else -> SubTaskStatus.INCOMPLETE
                 }
+
                 1 -> when (it) {
                     in 0..2 -> SubTaskStatus.COMPLETED
                     3 -> SubTaskStatus.ACTIVE
                     else -> SubTaskStatus.INCOMPLETE
                 }
+
                 else -> when (it) {
                     in 0..4 -> SubTaskStatus.COMPLETED
                     5 -> SubTaskStatus.ACTIVE
