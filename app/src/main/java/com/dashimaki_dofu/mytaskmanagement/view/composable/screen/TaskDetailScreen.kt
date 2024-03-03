@@ -22,6 +22,8 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +37,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dashimaki_dofu.mytaskmanagement.R
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
+import com.dashimaki_dofu.mytaskmanagement.model.SubTaskStatus
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel.UiState.Loaded
@@ -216,7 +223,15 @@ fun TaskDetailScreen(
                                     Spacer(modifier = Modifier.height(8.dp))
                                     LazyColumn {
                                         items(taskSubject.subTasks) { subTask ->
-                                            SubTaskListItem(subTask = subTask)
+                                            SubTaskListItem(
+                                                subTask = subTask,
+                                                onStatusSelected = {
+                                                    viewModel.updateSubTaskStatus(
+                                                        subTaskId = subTask.id,
+                                                        status = it
+                                                    )
+                                                }
+                                            )
                                         }
                                     }
                                 }
@@ -271,7 +286,12 @@ fun TaskDetailScreen(
 }
 
 @Composable
-fun SubTaskListItem(subTask: SubTask) {
+fun SubTaskListItem(
+    subTask: SubTask,
+    onStatusSelected: (SubTaskStatus) -> Unit,
+) {
+    var statusMenuExpanded by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier
             .padding(
@@ -294,13 +314,59 @@ fun SubTaskListItem(subTask: SubTask) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (val resourceId = subTask.status.stampResourceId) {
-                null -> Text(text = stringResource(id = R.string.subTask_status_active))
-                else -> Image(
-                    painter = painterResource(id = resourceId),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(60.dp)
-                )
+                null -> {
+                    TextButton(
+                        onClick = {
+                            statusMenuExpanded = true
+                        }
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.subTask_status_active),
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                else -> {
+                    IconButton(
+                        modifier = Modifier
+                            .size(72.dp),
+                        onClick = {
+                            statusMenuExpanded = true
+                        }
+                    ) {
+                        Image(
+                            painter = painterResource(id = resourceId),
+                            contentDescription = null,
+                        )
+                    }
+                }
+            }
+
+            DropdownMenu(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp)),
+                expanded = statusMenuExpanded,
+                onDismissRequest = {
+                    statusMenuExpanded = false
+                }
+            ) {
+                SubTaskStatus.entries.forEach {
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp, vertical = 8.dp),
+                        text = {
+                            Text(
+                                text = stringResource(id = it.stringResourceId),
+                                fontSize = 16.sp
+                            )
+                        },
+                        onClick = {
+                            onStatusSelected.invoke(it)
+                            statusMenuExpanded = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -321,5 +387,8 @@ fun TaskDetailScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun SubTaskListItemPreview() {
-    SubTaskListItem(subTask = makeDummySubTasks().first())
+    SubTaskListItem(
+        subTask = makeDummySubTasks().first(),
+        onStatusSelected = {}
+    )
 }

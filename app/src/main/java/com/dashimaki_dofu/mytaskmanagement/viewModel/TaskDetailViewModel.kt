@@ -2,6 +2,7 @@ package com.dashimaki_dofu.mytaskmanagement.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dashimaki_dofu.mytaskmanagement.model.SubTaskStatus
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.repository.TaskSubjectRepository
@@ -36,6 +37,7 @@ abstract class TaskDetailViewModel : ViewModel() {
     open fun showDeleteAlertDialog() = Unit
     open fun dismissDeleteAlertDialog() = Unit
     open fun deleteTask(taskId: Int, completion: () -> Unit) = Unit
+    open fun updateSubTaskStatus(subTaskId: Int, status: SubTaskStatus) = Unit
 }
 
 @HiltViewModel
@@ -68,6 +70,36 @@ class TaskDetailViewModelImpl @Inject constructor(
 
     override fun dismissDeleteAlertDialog() {
         _showDeleteAlertDialogState.value = false
+    }
+
+    override fun updateSubTaskStatus(subTaskId: Int, status: SubTaskStatus) {
+        viewModelScope.launch {
+            when (val state = _uiState.value) {
+                is Loaded -> {
+                    val targetSubTask =
+                        state.taskSubject.subTasks.firstOrNull { it.id == subTaskId }
+                    targetSubTask?.let { subTask ->
+                        subTask.status = status
+                        taskSubjectRepository.updateSubTask(subTask)
+                        val targetSubTaskIndex =
+                            state.taskSubject.subTasks.indexOfFirst { it.id == subTaskId }
+                        state.taskSubject.subTasks[targetSubTaskIndex] = subTask
+
+                        // FIXME: もっと良い方法があるのでは...
+                        //  TaskSubjectをdata classで実装すると、この処理でrecomposeされない
+                        //  data classの弊害なのか...一旦動くこれで実装しておく
+                        _uiState.value = state.copy(
+                            taskSubject = TaskSubject().also {
+                                it.task = state.taskSubject.task
+                                it.subTasks = state.taskSubject.subTasks
+                            }
+                        )
+                    }
+                }
+
+                else -> return@launch
+            }
+        }
     }
 }
 
