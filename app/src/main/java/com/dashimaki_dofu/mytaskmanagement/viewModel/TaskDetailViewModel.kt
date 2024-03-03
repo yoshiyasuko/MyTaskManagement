@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.dashimaki_dofu.mytaskmanagement.model.TaskSubject
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummyTaskSubjects
 import com.dashimaki_dofu.mytaskmanagement.repository.TaskSubjectRepository
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel.UiState.Loaded
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel.UiState.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +22,14 @@ import javax.inject.Inject
  */
 
 abstract class TaskDetailViewModel : ViewModel() {
-    abstract val taskSubject: StateFlow<TaskSubject>
+    sealed interface UiState {
+        data object Loading : UiState
+        data class Loaded(
+            val taskSubject: TaskSubject
+        ) : UiState
+    }
+
+    abstract val uiState: StateFlow<UiState>
     open val showDeleteAlertDialogState: StateFlow<Boolean> = MutableStateFlow(false)
 
     open fun fetchTaskSubject(taskId: Int) = Unit
@@ -33,8 +42,8 @@ abstract class TaskDetailViewModel : ViewModel() {
 class TaskDetailViewModelImpl @Inject constructor(
     private val taskSubjectRepository: TaskSubjectRepository,
 ) : TaskDetailViewModel() {
-    private val _taskSubject = MutableStateFlow(TaskSubject.initialize())
-    override val taskSubject = _taskSubject.asStateFlow()
+    private val _uiState = MutableStateFlow<UiState>(Loading)
+    override val uiState = _uiState.asStateFlow()
 
     private val _showDeleteAlertDialogState = MutableStateFlow(false)
     override val showDeleteAlertDialogState = _showDeleteAlertDialogState.asStateFlow()
@@ -48,7 +57,8 @@ class TaskDetailViewModelImpl @Inject constructor(
 
     override fun fetchTaskSubject(taskId: Int) {
         viewModelScope.launch {
-            _taskSubject.value = taskSubjectRepository.getTaskSubject(taskId)
+            val taskSubject = taskSubjectRepository.getTaskSubject(taskId)
+            _uiState.value = Loaded(taskSubject)
         }
     }
 
@@ -62,7 +72,12 @@ class TaskDetailViewModelImpl @Inject constructor(
 }
 
 class TaskDetailViewModelMock : TaskDetailViewModel() {
-    override val taskSubject: StateFlow<TaskSubject>
-        get() = MutableStateFlow(makeDummyTaskSubjects().first().also { it.subTasks = emptyList() })
+    override val uiState: StateFlow<UiState>
+        get() = MutableStateFlow(
+            Loaded(
+                makeDummyTaskSubjects()
+                    .first()
+            )
+        )
 }
 
