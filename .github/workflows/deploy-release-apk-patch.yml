@@ -1,0 +1,66 @@
+name: Deploy To App Distribution - Patch
+
+# FIXME: 完全自動化にはフローが未策定のため手動実行にしている
+# バージョンアップのPRがマージされたタイミングで自動実行したい
+on: [workflow_dispatch]
+
+jobs:
+  deploy-release-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: 'release'
+
+      - name: set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant Permission gradlew
+        run: chmod +x gradlew
+
+      - name: Make google-service.json
+        env:
+          GOOGLE_SERVICE: ${{ secrets.GOOGLE_SERVICE_JSON }}
+        run: echo $GOOGLE_SERVICE | base64 --decode --ignore-garbage > ./app/google-services.json
+
+      - name: Bump Patch Version
+        run: ./gradlew bumpPatchVersion
+
+      - name: Get Version
+        run: |
+          echo "::set-output name=VERSION_CODE::$(./gradlew -q printVersionCode)"
+          echo "::set-output name=VERSION_NAME::$(./gradlew -q printVersionName)"
+        id: version
+
+      - name: Building Release APK
+        env:
+          ENV_SIGN_KEYSTORE_BASE64: ${{ secrets.ENV_SIGN_KEYSTORE_BASE64 }}
+          ENV_SIGN_KEY_ALIAS: ${{ secrets.ENV_SIGN_KEY_ALIAS }}
+          ENV_SIGN_KEY_PASSWORD: ${{ secrets.ENV_SIGN_KEY_PASSWORD }}
+          ENV_SIGN_STORE_PASSWORD: ${{ secrets.ENV_SIGN_STORE_PASSWORD }}
+        run: ./gradlew assembleRelease
+
+      - name: Deploy to App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: release
+          releaseNotesFile: RELEASE_NOTE.md
+          file: ./app/build/outputs/apk/release/app-release.apk
+
+      - name: Init RELEASE_NOTE.md
+        run: cat RELEASE_NOTE.init.md > RELEASE_NOTE.md
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: after-released-${{ steps.version.outputs.VERSION_NAME }}-${{ steps.version.outputs.VERSION_NAME }}
+          base: release
+          title: "Released version: `${{ steps.version.outputs.VERSION_NAME }}` / `${{ steps.version.outputs.VERSION_CODE }}`"
+          commit-message: "Released version: `${{ steps.version.outputs.VERSION_NAME }}` / `${{ steps.version.outputs.VERSION_CODE }}`"

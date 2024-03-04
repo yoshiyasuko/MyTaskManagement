@@ -77,12 +77,12 @@ fun TaskEditScreen(
     onClickNavigationIcon: () -> Unit,
     onSaveCompleted: () -> Unit
 ) {
-    val task = viewModel.taskState.collectAsState()
-    val subTasks = viewModel.subTaskStateList.collectAsState()
+    val task = viewModel.taskState.collectAsState().value
+    val subTasks = viewModel.subTaskStateList.collectAsState().value
 
-    val showDatePickerState = viewModel.showDatePickerState.collectAsState()
-    val showTimePickerState = viewModel.showTimePickerState.collectAsState()
-    val showSaveErrorDialogState = viewModel.showAlertDialogState.collectAsState()
+    val showDatePicker = viewModel.showDatePickerState.collectAsState().value
+    val showTimePicker = viewModel.showTimePickerState.collectAsState().value
+    val showSaveErrorDialog = viewModel.showAlertDialogState.collectAsState().value
 
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = Instant.now()
@@ -133,10 +133,10 @@ fun TaskEditScreen(
                     actions = {
                         TextButton(
                             onClick = {
-                                if (!task.value.isTitleValid ||
-                                    !task.value.isDeadlineValid ||
-                                    subTasks.value.any { !it.isValid }
-                                    ) {
+                                if (!task.isTitleValid ||
+                                    !task.isDeadlineValid ||
+                                    subTasks.any { !it.isValid }
+                                ) {
                                     viewModel.showAlertDialog()
                                 } else {
                                     viewModel.saveTask(completion = onSaveCompleted)
@@ -170,7 +170,7 @@ fun TaskEditScreen(
                                 .fillMaxWidth()
                                 .padding(bottom = 16.dp),
                             singleLine = true,
-                            value = task.value.title,
+                            value = task.title,
                             onValueChange = {
                                 viewModel.updateTaskTitle(it)
                             }
@@ -193,7 +193,7 @@ fun TaskEditScreen(
                                     .padding(bottom = 16.dp),
                                 singleLine = true,
                                 enabled = false,
-                                value = task.value.formattedDeadlineString,
+                                value = task.formattedDeadlineString,
                                 onValueChange = {}
                             )
                         }
@@ -216,7 +216,7 @@ fun TaskEditScreen(
                                     .weight(1f),
                                 singleLine = true,
                                 enabled = false,
-                                value = task.value.formattedDeadlineTimeString,
+                                value = task.formattedDeadlineTimeString,
                                 onValueChange = {}
                             )
                             IconButton(
@@ -245,7 +245,7 @@ fun TaskEditScreen(
                             )
                         }
 
-                        if (showDatePickerState.value) {
+                        if (showDatePicker) {
                             DatePickerDialog(
                                 onDismissRequest = { viewModel.dismissDatePicker() },
                                 confirmButton = {
@@ -272,7 +272,7 @@ fun TaskEditScreen(
                             }
                         }
 
-                        if (showTimePickerState.value) {
+                        if (showTimePicker) {
                             TimePickerDialog(
                                 timePickerState = timePickerState,
                                 onDismissRequest = { viewModel.dismissTimePicker() },
@@ -301,7 +301,7 @@ fun TaskEditScreen(
                             )
                         }
 
-                        if (showSaveErrorDialogState.value) {
+                        if (showSaveErrorDialog) {
                             AlertDialog(
                                 onDismissRequest = {
                                     viewModel.dismissAlertDialog()
@@ -320,21 +320,21 @@ fun TaskEditScreen(
                                 },
                                 text = {
                                     Column {
-                                        if (!task.value.isTitleValid) {
+                                        if (!task.isTitleValid) {
                                             Text(
                                                 text = stringResource(
                                                     id = R.string.taskEdit_saveTaskErrorDialog_taskTitleNotValid
                                                 )
                                             )
                                         }
-                                        if (!task.value.isDeadlineValid) {
+                                        if (!task.isDeadlineValid) {
                                             Text(
                                                 text = stringResource(
                                                     id = R.string.taskEdit_saveTaskErrorDialog_taskDeadlineDateNotValid
                                                 )
                                             )
                                         }
-                                        subTasks.value.forEachIndexed { index, subTask ->
+                                        subTasks.forEachIndexed { index, subTask ->
                                             if (!subTask.isValid) {
                                                 Text(
                                                     text = stringResource(
@@ -351,7 +351,7 @@ fun TaskEditScreen(
                         }
                     }
 
-                    itemsIndexed(subTasks.value) {index, subTaskState ->
+                    itemsIndexed(subTasks) { index, subTaskState ->
                         SubTaskEditItem(
                             index = index,
                             subTaskState = subTaskState,
@@ -359,7 +359,7 @@ fun TaskEditScreen(
                                 viewModel.updateSubTaskTitle(index, it)
                             },
                             onClickDeleteButton = {
-                                viewModel.deleteSubTaskItem(index,)
+                                viewModel.deleteSubTaskItem(index)
                             },
                             onStatusSelected = { selectedStatus ->
                                 viewModel.updateSubTaskStatus(index, selectedStatus)
@@ -381,7 +381,7 @@ fun SubTaskEditItem(
     onStatusSelected: (SubTaskStatus) -> Unit
 ) {
     var statusMenuExpanded by remember { mutableStateOf(false) }
-    
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -429,6 +429,7 @@ fun SubTaskEditItem(
                             )
                         }
                     }
+
                     else -> {
                         IconButton(
                             modifier = Modifier
@@ -457,10 +458,10 @@ fun SubTaskEditItem(
                             modifier = Modifier
                                 .padding(horizontal = 4.dp, vertical = 8.dp),
                             text = {
-                               Text(
-                                   text = stringResource(id = it.stringResourceId),
-                                   fontSize = 16.sp
-                               )
+                                Text(
+                                    text = stringResource(id = it.stringResourceId),
+                                    fontSize = 16.sp
+                                )
                             },
                             onClick = {
                                 onStatusSelected.invoke(it)
