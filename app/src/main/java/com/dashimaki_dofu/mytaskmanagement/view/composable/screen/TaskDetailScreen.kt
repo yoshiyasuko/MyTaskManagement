@@ -22,6 +22,8 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +37,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,10 +56,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dashimaki_dofu.mytaskmanagement.R
-import com.dashimaki_dofu.mytaskmanagement.database.defaultId
 import com.dashimaki_dofu.mytaskmanagement.model.SubTask
+import com.dashimaki_dofu.mytaskmanagement.model.SubTaskStatus
 import com.dashimaki_dofu.mytaskmanagement.model.makeDummySubTasks
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel.UiState.Loaded
+import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModel.UiState.Loading
 import com.dashimaki_dofu.mytaskmanagement.viewModel.TaskDetailViewModelMock
 
 
@@ -72,7 +80,7 @@ fun TaskDetailScreen(
     onClickEditButton: () -> Unit,
     onDeleteCompleted: () -> Unit
 ) {
-    val taskSubject = viewModel.taskSubject.collectAsState().value
+    val uiState = viewModel.uiState.collectAsState().value
 
     val showDeleteAlertDialog = viewModel.showDeleteAlertDialogState.collectAsState().value
 
@@ -89,7 +97,10 @@ fun TaskDetailScreen(
                 TopAppBar(
                     title = {
                         Text(
-                            text = taskSubject.task.title,
+                            text = when (uiState) {
+                                is Loading -> "読み込み中..."
+                                is Loaded -> uiState.taskSubject.task.title
+                            },
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -134,124 +145,139 @@ fun TaskDetailScreen(
                     .padding(innerPadding)
                     .fillMaxSize()
             ) {
-                if (taskSubject.task.id == defaultId) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .padding(all = 16.dp)
-                            .shadow(
-                                elevation = 6.dp,
-                                shape = RoundedCornerShape(8.dp)
-                            )
-                            .background(
-                                taskSubject.task.color
-                                    .copy(alpha = 0.3f)
-                                    .compositeOver(Color.White)
-                            )
-                            .fillMaxWidth()
-                    ) {
-                        Column(
+                when (uiState) {
+                    is Loading -> {
+                        CircularProgressIndicator(
                             modifier = Modifier
-                                .padding(all = 20.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = stringResource(
-                                    id = R.string.taskDetail_deadline,
-                                    taskSubject.task.formattedDeadLineDetailString
-                                ),
-                                color = Color.Red,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 28.sp
-                            )
-                            Spacer(modifier = Modifier.height(10.dp))
+                                .align(Alignment.Center)
+                        )
+                    }
 
-                            if (taskSubject.subTasks.isEmpty()) {
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth(),
-                                    text = stringResource(id = R.string.taskDetail_emptySubTask),
-                                    textAlign = TextAlign.Center
+                    is Loaded -> {
+                        val taskSubject = uiState.taskSubject
+
+                        Box(
+                            modifier = Modifier
+                                .padding(all = 16.dp)
+                                .shadow(
+                                    elevation = 6.dp,
+                                    shape = RoundedCornerShape(8.dp)
                                 )
-                            } else {
-                                Box(
-                                    modifier = Modifier
-                                        .height(60.dp)
-                                        .clip(RoundedCornerShape(12.dp))
-                                        .border(
-                                            width = 4.dp,
-                                            color = taskSubject.task.color,
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
-                                        .fillMaxWidth()
-                                ) {
+                                .background(
+                                    taskSubject.task.color
+                                        .copy(alpha = 0.3f)
+                                        .compositeOver(Color.White)
+                                )
+                                .fillMaxWidth()
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(all = 20.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.taskDetail_deadline,
+                                        taskSubject.task.formattedDeadLineDetailString
+                                    ),
+                                    color = Color.Red,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 28.sp
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                if (taskSubject.subTasks.isEmpty()) {
+                                    Text(
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        text = stringResource(id = R.string.taskDetail_emptySubTask),
+                                        textAlign = TextAlign.Center
+                                    )
+                                } else {
                                     Box(
                                         modifier = Modifier
-                                            .fillMaxWidth(taskSubject.progressRate)
-                                            .fillMaxHeight()
-                                            .background(color = taskSubject.task.color)
-                                    )
-                                    Text(
-                                        text = taskSubject.progressRateString,
-                                        fontSize = 32.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = taskSubject.progressRateStringColor,
-                                        modifier = Modifier
-                                            .align(Alignment.Center)
-                                    )
-                                }
-                                Spacer(modifier = Modifier.height(8.dp))
-                                LazyColumn {
-                                    items(taskSubject.subTasks) { subTask ->
-                                        SubTaskListItem(subTask = subTask)
+                                            .height(60.dp)
+                                            .clip(RoundedCornerShape(12.dp))
+                                            .border(
+                                                width = 4.dp,
+                                                color = taskSubject.task.color,
+                                                shape = RoundedCornerShape(12.dp)
+                                            )
+                                            .fillMaxWidth()
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxWidth(taskSubject.progressRate)
+                                                .fillMaxHeight()
+                                                .background(color = taskSubject.task.color)
+                                        )
+                                        Text(
+                                            text = taskSubject.progressRateString,
+                                            fontSize = 32.sp,
+                                            fontWeight = FontWeight.Bold,
+                                            color = taskSubject.progressRateStringColor,
+                                            modifier = Modifier
+                                                .align(Alignment.Center)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    LazyColumn {
+                                        items(taskSubject.subTasks) { subTask ->
+                                            SubTaskListItem(
+                                                subTask = subTask,
+                                                onStatusSelected = {
+                                                    viewModel.updateSubTaskStatus(
+                                                        subTaskId = subTask.id,
+                                                        status = it
+                                                    )
+                                                }
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    if (showDeleteAlertDialog) {
-                        AlertDialog(
-                            onDismissRequest = {
-                                viewModel.dismissDeleteAlertDialog()
-                            },
-                            confirmButton = {
-                                TextButton(
-                                    onClick = {
-                                        viewModel.dismissDeleteAlertDialog()
-                                        viewModel.deleteTask(
-                                            taskSubject.task.id,
-                                            completion = onDeleteCompleted
+
+                        if (showDeleteAlertDialog) {
+                            AlertDialog(
+                                onDismissRequest = {
+                                    viewModel.dismissDeleteAlertDialog()
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.dismissDeleteAlertDialog()
+                                            viewModel.deleteTask(
+                                                taskSubject.task.id,
+                                                completion = onDeleteCompleted
+                                            )
+                                        }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.common_ok))
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.dismissDeleteAlertDialog()
+                                        }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.common_cancel))
+                                    }
+                                },
+                                title = {
+                                    Text(
+                                        text = stringResource(
+                                            id = R.string.taskDetail_alertDeleteDialog_confirmTitle,
+                                            taskSubject.task.title
                                         )
-                                    }
-                                ) {
-                                    Text(text = stringResource(id = R.string.common_ok))
-                                }
-                            },
-                            dismissButton = {
-                                TextButton(
-                                    onClick = {
-                                        viewModel.dismissDeleteAlertDialog()
-                                    }
-                                ) {
-                                    Text(text = stringResource(id = R.string.common_cancel))
-                                }
-                            },
-                            title = {
-                                Text(
-                                    text = stringResource(
-                                        id = R.string.taskDetail_alertDeleteDialog_confirmTitle,
-                                        taskSubject.task.title
                                     )
-                                )
-                            },
-                            text = {
-                                Text(text = stringResource(id = R.string.taskDetail_alertDeleteDialog_confirmMessage))
-                            }
-                        )
+                                },
+                                text = {
+                                    Text(text = stringResource(id = R.string.taskDetail_alertDeleteDialog_confirmMessage))
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -260,7 +286,12 @@ fun TaskDetailScreen(
 }
 
 @Composable
-fun SubTaskListItem(subTask: SubTask) {
+fun SubTaskListItem(
+    subTask: SubTask,
+    onStatusSelected: (SubTaskStatus) -> Unit,
+) {
+    var statusMenuExpanded by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier
             .padding(
@@ -283,13 +314,59 @@ fun SubTaskListItem(subTask: SubTask) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (val resourceId = subTask.status.stampResourceId) {
-                null -> Text(text = stringResource(id = R.string.subTask_status_active))
-                else -> Image(
-                    painter = painterResource(id = resourceId),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(60.dp)
-                )
+                null -> {
+                    TextButton(
+                        onClick = {
+                            statusMenuExpanded = true
+                        }
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.subTask_status_active),
+                            color = Color.Black
+                        )
+                    }
+                }
+
+                else -> {
+                    IconButton(
+                        modifier = Modifier
+                            .size(72.dp),
+                        onClick = {
+                            statusMenuExpanded = true
+                        }
+                    ) {
+                        Image(
+                            painter = painterResource(id = resourceId),
+                            contentDescription = null,
+                        )
+                    }
+                }
+            }
+
+            DropdownMenu(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp)),
+                expanded = statusMenuExpanded,
+                onDismissRequest = {
+                    statusMenuExpanded = false
+                }
+            ) {
+                SubTaskStatus.entries.forEach {
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .padding(horizontal = 4.dp, vertical = 8.dp),
+                        text = {
+                            Text(
+                                text = stringResource(id = it.stringResourceId),
+                                fontSize = 16.sp
+                            )
+                        },
+                        onClick = {
+                            onStatusSelected.invoke(it)
+                            statusMenuExpanded = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -310,5 +387,8 @@ fun TaskDetailScreenPreview() {
 @Preview(showBackground = true)
 @Composable
 fun SubTaskListItemPreview() {
-    SubTaskListItem(subTask = makeDummySubTasks().first())
+    SubTaskListItem(
+        subTask = makeDummySubTasks().first(),
+        onStatusSelected = {}
+    )
 }

@@ -16,13 +16,20 @@ import java.time.ZoneOffset
 
 class LocalTimeConverter {
     @TypeConverter
-    fun fromTimestamp(millis: Long?) : LocalTime? {
-        return millis?.let { Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalTime() }
+    fun fromTimestamp(millis: Long?): LocalTime? {
+        return millis?.let {
+            Instant
+                .ofEpochMilli(it)
+                .atZone(ZoneId.systemDefault())
+                .toLocalTime()
+        }
     }
 
     @TypeConverter
-    fun toTimestamp(time: LocalTime?) : Long? {
-        return time?.atDate(LocalDate.now(ZoneId.systemDefault()))?.toInstant(ZoneOffset.ofHours(9))
+    fun toTimestamp(time: LocalTime?): Long? {
+        return time
+            ?.atDate(LocalDate.now(ZoneId.systemDefault()))
+            ?.toInstant(ZoneOffset.ofHours(9))
             ?.toEpochMilli()
     }
 }
