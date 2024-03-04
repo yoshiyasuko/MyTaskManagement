@@ -9,7 +9,7 @@ on:
 jobs:
   auto-assign:
     uses: ./.github/workflows/auto-assign.yml
-  approve:
+  auto-approve:
     needs: auto-assign
     if: |
       github.event.pull_request.user.login == github.repository_owner
@@ -18,4 +18,11 @@ jobs:
     permissions:
       pull-requests: write
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js from `.node-version`
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.node-version'
+
       - uses: hmarr/auto-approve-action@v3

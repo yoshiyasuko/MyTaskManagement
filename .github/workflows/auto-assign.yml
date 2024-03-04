@@ -6,4 +6,11 @@ jobs:
   auto-assign:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js from `.node-version`
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: '.node-version'
+
       - uses: kentaro-m/auto-assign-action@v2.0.0
