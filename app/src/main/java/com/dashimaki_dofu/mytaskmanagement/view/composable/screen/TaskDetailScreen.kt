@@ -93,6 +93,7 @@ fun TaskDetailScreen(
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(
+            //region Scaffold Contents
             topBar = {
                 TopAppBar(
                     title = {
@@ -139,6 +140,7 @@ fun TaskDetailScreen(
                     }
                 )
             }
+            //endregion
         ) { innerPadding ->
             Box(
                 modifier = Modifier
@@ -147,13 +149,16 @@ fun TaskDetailScreen(
             ) {
                 when (uiState) {
                     is Loading -> {
+                        //region Loading Composable
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .align(Alignment.Center)
                         )
+                        //endregion
                     }
 
                     is Loaded -> {
+                        //region Loaded Composable
                         val taskSubject = uiState.taskSubject
 
                         Box(
@@ -237,7 +242,9 @@ fun TaskDetailScreen(
                                 }
                             }
                         }
+                        //endregion
 
+                        //region DeleteAlertDialog
                         if (showDeleteAlertDialog) {
                             AlertDialog(
                                 onDismissRequest = {
@@ -278,6 +285,7 @@ fun TaskDetailScreen(
                                 }
                             )
                         }
+                        //endregion
                     }
                 }
             }
