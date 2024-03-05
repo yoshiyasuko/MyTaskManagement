@@ -24,7 +24,8 @@
 - 17
 
 ## Node.js
-- 19.3.0
+- 20.0.0
+  - set by [.node-version](.node-version), so please use `nodeenv`
 
 # On-boarding
 1. clone this repository.

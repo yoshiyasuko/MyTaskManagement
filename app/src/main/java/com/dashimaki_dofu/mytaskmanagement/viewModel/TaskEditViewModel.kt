@@ -29,7 +29,9 @@ import javax.inject.Inject
  * Created by Yoshiyasu on 2024/02/22
  */
 
+//region TaskEditViewModel(abstract class)
 abstract class TaskEditViewModel : ViewModel() {
+    //region UiState
     sealed interface UiState {
         data class TaskState(
             var id: Int = defaultId,
@@ -83,7 +85,9 @@ abstract class TaskEditViewModel : ViewModel() {
             }
         }
     }
+    //endregion
 
+    //region properties
     var deleteSubTaskIds: MutableList<Int> = mutableListOf()
 
     open val taskState: StateFlow<UiState.TaskState> = MutableStateFlow(UiState.TaskState())
@@ -93,7 +97,9 @@ abstract class TaskEditViewModel : ViewModel() {
     open val showDatePickerState: StateFlow<Boolean> = MutableStateFlow(false)
     open val showTimePickerState: StateFlow<Boolean> = MutableStateFlow(false)
     open val showAlertDialogState: StateFlow<Boolean> = MutableStateFlow(false)
+    //endregion
 
+    //region functions
     open fun loadTaskSubject(taskId: Int?) = Unit
     open fun updateTaskTitle(title: String) = Unit
     open fun updateTaskDeadline(dateMillis: Long?) = Unit
@@ -111,12 +117,16 @@ abstract class TaskEditViewModel : ViewModel() {
     open fun dismissTimePicker() = Unit
     open fun showAlertDialog() = Unit
     open fun dismissAlertDialog() = Unit
+    //endregion
 }
+//endregion
 
+//region Impl
 @HiltViewModel
 class TaskEditViewModelImpl @Inject constructor(
     private val taskSubjectRepository: TaskSubjectRepository
 ) : TaskEditViewModel() {
+    //region properties
     private val _taskState = MutableStateFlow(UiState.TaskState())
     override val taskState = _taskState.asStateFlow()
 
@@ -132,7 +142,9 @@ class TaskEditViewModelImpl @Inject constructor(
 
     private val _showAlertDialogState = MutableStateFlow(false)
     override val showAlertDialogState = _showAlertDialogState.asStateFlow()
+    //endregion
 
+    //region methods
     override fun loadTaskSubject(taskId: Int?) {
         viewModelScope.launch {
             taskId?.let {
@@ -272,11 +284,15 @@ class TaskEditViewModelImpl @Inject constructor(
     override fun dismissAlertDialog() {
         _showAlertDialogState.value = false
     }
+    //endregion
 }
+//endregion
 
+//region Mock
 class TaskEditViewModelMock : TaskEditViewModel() {
     override val taskState: StateFlow<UiState.TaskState>
         get() = MutableStateFlow(UiState.TaskState())
     override val subTaskStateList: StateFlow<MutableList<UiState.SubTaskState>>
         get() = MutableStateFlow(mutableListOf(UiState.SubTaskState(title = "子課題")))
 }
+//endregion

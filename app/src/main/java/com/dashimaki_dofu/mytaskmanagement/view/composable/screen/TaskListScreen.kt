@@ -68,6 +68,7 @@ fun TaskListScreen(
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(
+            //region Scaffold Contents
             topBar = {
                 TopAppBar(
                     title = {
@@ -117,6 +118,7 @@ fun TaskListScreen(
                     }
                 )
             }
+            //endregion
         ) { innerPadding ->
             Box(
                 modifier = Modifier

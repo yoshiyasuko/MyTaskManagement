@@ -21,6 +21,7 @@ import javax.inject.Inject
  * Created by Yoshiyasu on 2024/02/13
  */
 
+//region TaskListViewModel(abstract class)
 abstract class TaskListViewModel : ViewModel() {
     sealed interface UiState {
         data object Loading : UiState
@@ -33,7 +34,9 @@ abstract class TaskListViewModel : ViewModel() {
 
     open fun fetchTaskSubjects() = Unit
 }
+//endregion
 
+//region Impl
 @HiltViewModel
 class TaskListViewModelImpl @Inject constructor(
     private val taskSubjectRepository: TaskSubjectRepository,
@@ -48,8 +51,11 @@ class TaskListViewModelImpl @Inject constructor(
         }
     }
 }
+//endregion
 
+//region Mock
 class TaskListViewModelMock : TaskListViewModel() {
     override val uiState: StateFlow<UiState>
         get() = MutableStateFlow(Loaded(makeDummyTaskSubjects()))
 }
+//endregion

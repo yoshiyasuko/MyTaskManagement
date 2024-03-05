@@ -26,7 +26,7 @@ data class Task(
     var deadlineDate: Instant? = null,
     var deadlineTime: LocalTime? = null
 ) {
-    // 締切表示: "M/d"形式
+    // 締切を省略表示: "M/d"形式
     val formattedDeadLineString: String
         get() {
             return deadlineDate?.let {
@@ -36,6 +36,7 @@ data class Task(
             } ?: ""
         }
 
+    // 締切を詳細表示: "M/d HH:mm"形式
     val formattedDeadLineDetailString: String
         get() {
             val deadlineTimeString = deadlineTime?.let {
@@ -45,6 +46,7 @@ data class Task(
             return formattedDeadLineString + deadlineTimeString
         }
 
+    // 課題のベースカラー
     val color: Color
         get() {
             return Color(colorValue)

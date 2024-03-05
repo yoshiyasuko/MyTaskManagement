@@ -38,11 +38,14 @@ class TaskSubject {
                 .toFloat()
         }
 
+    // 課題の進捗率表示用
     val progressRateString: String
         get() {
             return "${(progressRate * 100).toInt()}%"
         }
 
+    // 課題の進捗率表示のフォントカラー
+    //  100%の場合だけ緑色、それ以外は黒
     val progressRateStringColor: Color
         get() {
             return if (subTasks.any { it.status != SubTaskStatus.COMPLETED } || subTasks.isEmpty()) {

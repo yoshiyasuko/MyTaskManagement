@@ -103,6 +103,7 @@ fun TaskEditScreen(
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(
+            //region Scaffold Contents
             topBar = {
                 TopAppBar(
                     title = {
@@ -148,6 +149,7 @@ fun TaskEditScreen(
                     }
                 )
             }
+            //endregion
         ) { innerPadding ->
             Box(
                 modifier = Modifier
@@ -159,7 +161,9 @@ fun TaskEditScreen(
                         .fillMaxSize()
                         .padding(8.dp)
                 ) {
+                    //region Edit Task
                     item {
+                        //region Edit: Task Title
                         Text(
                             modifier = Modifier
                                 .padding(bottom = 4.dp),
@@ -175,6 +179,8 @@ fun TaskEditScreen(
                                 viewModel.updateTaskTitle(it)
                             }
                         )
+                        //endregion
+                        //region Edit: Task Deadline Date
                         Text(
                             modifier = Modifier
                                 .padding(bottom = 4.dp),
@@ -197,6 +203,8 @@ fun TaskEditScreen(
                                 onValueChange = {}
                             )
                         }
+                        //endregion
+                        //region Edit: Task Deadline Time
                         Text(
                             modifier = Modifier
                                 .padding(bottom = 4.dp),
@@ -230,7 +238,9 @@ fun TaskEditScreen(
                                 )
                             }
                         }
+                        //endregion
                         Spacer(modifier = Modifier.height(16.dp))
+                        //region Add SubTask Button
                         Button(
                             modifier = Modifier
                                 .padding(bottom = 16.dp),
@@ -244,7 +254,9 @@ fun TaskEditScreen(
                                 text = stringResource(id = R.string.taskEdit_addSubTaskButton)
                             )
                         }
+                        //endregion
 
+                        //region DatePickerDialog
                         if (showDatePicker) {
                             DatePickerDialog(
                                 onDismissRequest = { viewModel.dismissDatePicker() },
@@ -271,7 +283,9 @@ fun TaskEditScreen(
                                 DatePicker(state = datePickerState)
                             }
                         }
+                        //endregion
 
+                        //region TimePickerDialog
                         if (showTimePicker) {
                             TimePickerDialog(
                                 timePickerState = timePickerState,
@@ -300,7 +314,9 @@ fun TaskEditScreen(
                                 }
                             )
                         }
+                        //endregion
 
+                        //region SaveErrorDialog
                         if (showSaveErrorDialog) {
                             AlertDialog(
                                 onDismissRequest = {
@@ -349,8 +365,11 @@ fun TaskEditScreen(
                                 dismissButton = null
                             )
                         }
+                        //endregion
                     }
+                    //endregion
 
+                    //region Edit: SubTasks
                     itemsIndexed(subTasks) { index, subTaskState ->
                         SubTaskEditItem(
                             index = index,
@@ -366,6 +385,7 @@ fun TaskEditScreen(
                             }
                         )
                     }
+                    //endregion
                 }
             }
         }
@@ -386,6 +406,7 @@ fun SubTaskEditItem(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        //region SubTask Label
         Text(
             modifier = Modifier
                 .padding(bottom = 4.dp),
@@ -394,11 +415,13 @@ fun SubTaskEditItem(
                 index + 1
             )
         )
+        //endregion
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            //region Edit SubTask Title
             TextField(
                 modifier = Modifier
                     .weight(1f),
@@ -406,6 +429,8 @@ fun SubTaskEditItem(
                 value = subTaskState.title,
                 onValueChange = onValueChanged
             )
+            //endregion
+            //region SubTask Status Button
             val statusButtonWidth = 60.dp
             val statusButtonHeight = 48.dp
             Box(
@@ -471,6 +496,8 @@ fun SubTaskEditItem(
                     }
                 }
             }
+            //endregion
+            //region DeleteButton
             IconButton(
                 modifier = Modifier
                     .size(48.dp),
@@ -481,6 +508,7 @@ fun SubTaskEditItem(
                     contentDescription = "delete"
                 )
             }
+            //endregion
         }
     }
 }

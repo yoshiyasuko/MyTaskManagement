@@ -26,11 +26,12 @@ fun MyTaskManagementApp(
 ) {
     MyTaskManagementTheme {
         val navController = rememberNavController()
+        //region NavHost
         NavHost(
             navController = navController,
             startDestination = NavLinks.TaskList.route,
         ) {
-            // 課題一覧画面
+            //region 課題一覧画面
             composable(
                 route = NavLinks.TaskList.route
             ) {
@@ -46,8 +47,9 @@ fun MyTaskManagementApp(
                     onClickSendFeedback = onClickSendFeedback
                 )
             }
+            //endregion
 
-            // 課題詳細画面
+            //region 課題詳細画面
             composable(
                 route = NavLinks.TaskDetail.route,
                 arguments = listOf(
@@ -72,8 +74,9 @@ fun MyTaskManagementApp(
                     }
                 )
             }
+            //endregion
 
-            // 課題追加画面
+            //region 課題追加画面
             composable(
                 route = NavLinks.TaskCreate.route
             ) {
@@ -88,8 +91,9 @@ fun MyTaskManagementApp(
                     }
                 )
             }
+            //endregion
 
-            // 課題編集画面
+            //region 課題編集画面
             composable(
                 route = NavLinks.TaskEdit.route,
                 arguments = listOf(
@@ -111,6 +115,8 @@ fun MyTaskManagementApp(
                     }
                 )
             }
+            //endregion
         }
+        //endregion
     }
 }

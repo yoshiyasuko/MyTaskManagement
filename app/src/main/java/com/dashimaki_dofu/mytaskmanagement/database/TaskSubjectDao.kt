@@ -39,6 +39,8 @@ interface TaskSubjectDao {
     @Transaction
     suspend fun insertOrUpdateTask(task: Task): Int {
         return if (countTask(task.id) > 0) {
+            // MEMO: @Updateの戻り値はidではなく「レコードが存在した行数」のため注意
+            //  そのため明示的にtask.idを戻している
             updateTask(task)
             task.id
         } else {
