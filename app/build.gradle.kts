@@ -93,8 +93,10 @@ dependencies {
     val lifecycleVersion = "2.7.0"
     val composeRuntimeVersion = "1.6.1"
     val hiltVersion = "2.48"
+    val materialVersion = "1.6.3"
 
     implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.compose.material:material:${materialVersion}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${lifecycleVersion}")
     implementation("androidx.activity:activity-compose:1.7.0")
@@ -126,6 +128,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(kotlin("reflect"))
 }
 
 class Version(private var code: Int, version: String) {

@@ -24,4 +24,5 @@ sealed class NavLinks(val route: String) {
             return "taskEdit/${id}"
         }
     }
+    data object Calendar : NavLinks("calendar")
 }
