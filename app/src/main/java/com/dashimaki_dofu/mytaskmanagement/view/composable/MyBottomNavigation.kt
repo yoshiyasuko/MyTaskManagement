@@ -54,6 +54,7 @@ fun MyBottomNavigation(
                         contentDescription = null
                     )
                 },
+                alwaysShowLabel = false,
                 onClick = {
                     navController.navigate(screen.route)
                 }
