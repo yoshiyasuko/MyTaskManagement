@@ -5,7 +5,7 @@
     <string name="common.cancel">キャンセル</string>
     <string name="common.save">保存</string>
     <string name="common.decide">決定</string>
-    
+
     <string name="common.feedback.send">フィードバックを送信</string>
     <string name="common.feedback.screenMessage">何か意見があったら教えてー！(*´▽｀*)</string>
     
@@ -23,6 +23,9 @@
     <string name="taskDetail.emptySubTask">子課題がありません\n右上の編集ボタンから子課題を登録しましょう</string>
     <string name="taskDetail.alertDeleteDialog.confirmTitle">%sを削除します。よろしいですか？</string>
     <string name="taskDetail.alertDeleteDialog.confirmMessage">この操作は元に戻せません。</string>
+    <string name="taskDetail.dropDownMenu.copy">課題をコピー</string>
+    <string name="taskDetail.alertCopyDialog.confirmTitle">課題をコピーします。よろしいですか？</string>
+    <string name="taskDetail.alertCopyDialog.confirmMessage">子課題の進捗状況はコピーされません。</string>
 
     <string name="taskEdit.title.create">課題の追加</string>
     <string name="taskEdit.title.edit">課題の編集</string>
