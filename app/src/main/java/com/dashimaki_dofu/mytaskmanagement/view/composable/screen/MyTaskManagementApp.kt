@@ -71,6 +71,9 @@ fun MyTaskManagementApp(
                     },
                     onDeleteCompleted = {
                         navController.navigateUp()
+                    },
+                    onCopyCompleted = {
+                        navController.navigateUp()
                     }
                 )
             }

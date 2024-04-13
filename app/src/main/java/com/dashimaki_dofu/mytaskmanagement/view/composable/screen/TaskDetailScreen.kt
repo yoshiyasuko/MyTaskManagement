@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
@@ -78,11 +79,15 @@ fun TaskDetailScreen(
     viewModel: TaskDetailViewModel,
     onClickNavigationIcon: () -> Unit,
     onClickEditButton: () -> Unit,
-    onDeleteCompleted: () -> Unit
+    onDeleteCompleted: () -> Unit,
+    onCopyCompleted: () -> Unit
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
     val showDeleteAlertDialog = viewModel.showDeleteAlertDialogState.collectAsState().value
+    val showCopyAlertDialog = viewModel.showCopyAlertDialogState.collectAsState().value
+
+    var feedbackMenuExpanded by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.fetchTaskSubject(taskId)
@@ -135,6 +140,34 @@ fun TaskDetailScreen(
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "delete"
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                feedbackMenuExpanded = true
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "More"
+                            )
+                        }
+                        DropdownMenu(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(16.dp)),
+                            expanded = feedbackMenuExpanded,
+                            onDismissRequest = {
+                                feedbackMenuExpanded = false
+                            }
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = stringResource(id = R.string.taskDetail_dropDownMenu_copy))
+                                },
+                                onClick = {
+                                    feedbackMenuExpanded = false
+                                    viewModel.showCopyAlertDialog()
+                                }
                             )
                         }
                     }
@@ -286,6 +319,49 @@ fun TaskDetailScreen(
                             )
                         }
                         //endregion
+
+                        //region CopyAlertDialog
+                        if (showCopyAlertDialog) {
+                            AlertDialog(
+                                onDismissRequest = {
+                                    viewModel.dismissCopyAlertDialog()
+                                },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.dismissCopyAlertDialog()
+                                            viewModel.copyTask(
+                                                taskSubject = taskSubject,
+                                                completion = onCopyCompleted
+                                            )
+                                        }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.common_ok))
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(
+                                        onClick = {
+                                            viewModel.dismissDeleteAlertDialog()
+                                        }
+                                    ) {
+                                        Text(text = stringResource(id = R.string.common_cancel))
+                                    }
+                                },
+                                title = {
+                                    Text(
+                                        text = stringResource(
+                                            id = R.string.taskDetail_alertCopyDialog_confirmTitle,
+                                            taskSubject.task.title
+                                        )
+                                    )
+                                },
+                                text = {
+                                    Text(text = stringResource(id = R.string.taskDetail_alertCopyDialog_confirmMessage))
+                                }
+                            )
+                        }
+                        //endregion
                     }
                 }
             }
@@ -388,7 +464,8 @@ fun TaskDetailScreenPreview() {
         viewModel = TaskDetailViewModelMock(),
         onClickEditButton = {},
         onClickNavigationIcon = {},
-        onDeleteCompleted = {}
+        onDeleteCompleted = {},
+        onCopyCompleted = {}
     )
 }
 
