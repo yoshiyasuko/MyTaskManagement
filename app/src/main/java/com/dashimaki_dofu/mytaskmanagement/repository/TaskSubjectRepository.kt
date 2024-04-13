@@ -14,6 +14,7 @@ import javax.inject.Inject
  * Created by Yoshiyasu on 2024/02/10
  */
 
+//region Interface
 interface TaskSubjectRepository {
     suspend fun getAllTaskSubjects(): List<TaskSubject>
     suspend fun getTaskSubject(taskId: Int): TaskSubject
@@ -23,7 +24,9 @@ interface TaskSubjectRepository {
     suspend fun updateSubTask(subTask: SubTask): Int
     suspend fun deleteSubTask(subTaskId: Int): Int
 }
+//endregion
 
+//region Impl
 class TaskSubjectRepositoryImpl @Inject constructor(
     private val taskSubjectDao: TaskSubjectDao
 ) : TaskSubjectRepository {
@@ -55,7 +58,9 @@ class TaskSubjectRepositoryImpl @Inject constructor(
         return taskSubjectDao.deleteSubTask(subTaskId)
     }
 }
+//endregion
 
+//region Mock
 class TaskSubjectRepositoryMock : TaskSubjectRepository {
     override suspend fun getAllTaskSubjects(): List<TaskSubject> {
         return makeDummyTaskSubjects()
@@ -71,3 +76,4 @@ class TaskSubjectRepositoryMock : TaskSubjectRepository {
     override suspend fun updateSubTask(subTask: SubTask) = -1
     override suspend fun deleteSubTask(subTaskId: Int) = -1
 }
+//endregion

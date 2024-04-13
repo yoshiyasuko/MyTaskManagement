@@ -56,12 +56,14 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
                     .compositeOver(Color.White)
             )
     ) {
+        //region Progress Rate Bar
         Box(
             modifier = Modifier
                 .fillMaxHeight()
                 .background(taskSubject.task.color)
                 .fillMaxWidth(taskSubject.progressRate)
         )
+        //endregion
         Box(
             modifier = Modifier.padding(all = 8.dp),
             contentAlignment = Alignment.Center
@@ -74,6 +76,7 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
                     .fillMaxWidth()
             ) {
                 Spacer(modifier = Modifier.width(20.dp))
+                //region Task Title
                 Text(
                     text = taskSubject.task.title,
                     modifier = Modifier
@@ -83,11 +86,13 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
                     fontSize = 16.sp,
                     color = taskSubject.task.listTitleColor
                 )
+                //endregion
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.End
                 ) {
                     Spacer(modifier = Modifier.width(8.dp))
+                    //region Progress Rate
                     Text(
                         modifier = Modifier
                             .width(68.dp),
@@ -97,7 +102,9 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
                         textAlign = TextAlign.End,
                         text = taskSubject.progressRateString
                     )
+                    //endregion
                     Spacer(modifier = Modifier.width(16.dp))
+                    //region Deadline
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -114,6 +121,7 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
                             color = Color.Red
                         )
                     }
+                    //endregion
                 }
             }
         }
