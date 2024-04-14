@@ -342,7 +342,7 @@ fun TaskDetailScreen(
                                 dismissButton = {
                                     TextButton(
                                         onClick = {
-                                            viewModel.dismissDeleteAlertDialog()
+                                            viewModel.dismissCopyAlertDialog()
                                         }
                                     ) {
                                         Text(text = stringResource(id = R.string.common_cancel))
