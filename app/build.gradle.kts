@@ -19,8 +19,8 @@ android {
         applicationId = "com.dashimaki_dofu.mytaskmanagement"
         minSdk = 29
         targetSdk = 34
-        versionCode = 10
-        versionName = "0.9.0"
+        versionCode = 11
+        versionName = "0.9.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
