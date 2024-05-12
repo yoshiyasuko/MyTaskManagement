@@ -18,7 +18,7 @@ import com.dashimaki_dofu.mytaskmanagement.model.Task
  * Created by Yoshiyasu on 2024/02/10
  */
 
-const val roomSchemaVersion = 2
+const val roomSchemaVersion = 3
 const val defaultId = 0
 
 @Database(
@@ -26,7 +26,8 @@ const val defaultId = 0
     version = roomSchemaVersion,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration(from = 1, to = 2, TaskNameDeadlineToDeadlineDateMigrationSpec::class)
+        AutoMigration(from = 1, to = 2, TaskNameDeadlineToDeadlineDateMigrationSpec::class),
+        AutoMigration(from = 2, to = 3, TaskAddMemoMigrationSpec::class)
     ]
 )
 @TypeConverters(InstantConverter::class, LocalTimeConverter::class)
@@ -43,3 +44,4 @@ abstract class TaskDatabase : RoomDatabase() {
     toColumnName = "deadlineDate"
 )
 class TaskNameDeadlineToDeadlineDateMigrationSpec : AutoMigrationSpec
+class TaskAddMemoMigrationSpec : AutoMigrationSpec

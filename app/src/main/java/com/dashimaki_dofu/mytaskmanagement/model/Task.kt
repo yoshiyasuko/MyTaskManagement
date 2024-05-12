@@ -7,6 +7,7 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.core.graphics.toColor
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.dashimaki_dofu.mytaskmanagement.database.defaultId
@@ -24,7 +25,8 @@ data class Task(
     var title: String = "",
     var colorValue: Long = TaskColor.YELLOW.code,
     var deadlineDate: Instant? = null,
-    var deadlineTime: LocalTime? = null
+    var deadlineTime: LocalTime? = null,
+    @ColumnInfo(defaultValue = "") var memo: String = ""
 ) {
     // 締切を省略表示: "M/d"形式
     val formattedDeadLineString: String
