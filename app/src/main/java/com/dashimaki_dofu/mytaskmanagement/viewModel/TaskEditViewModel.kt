@@ -38,6 +38,7 @@ abstract class TaskEditViewModel : ViewModel() {
             var title: String = "",
             var deadlineDate: Instant? = null,
             var deadlineTime: LocalTime? = null,
+            var memo: String = "",
             var isTitleValid: Boolean = false,
             var isDeadlineValid: Boolean = false
         ) : UiState {
@@ -46,6 +47,7 @@ abstract class TaskEditViewModel : ViewModel() {
                 title = task.title
                 deadlineDate = task.deadlineDate
                 deadlineTime = task.deadlineTime
+                memo = task.memo
                 isTitleValid = task.title.isNotEmpty()
                 isDeadlineValid = task.formattedDeadLineString.isNotEmpty()
             }
@@ -105,6 +107,8 @@ abstract class TaskEditViewModel : ViewModel() {
     open fun updateTaskDeadline(dateMillis: Long?) = Unit
     open fun updateTaskDeadlineTime(hour: Int, minute: Int) = Unit
     open fun clearTaskDeadlineTime() = Unit
+    open fun updateTaskMemo(memo: String) = Unit
+    open fun clearTaskMemo() = Unit
     open fun saveTask(completion: (() -> Unit)?) = Unit
     open fun addSubTaskItem() = Unit
     open fun deleteSubTaskItem(index: Int) = Unit
@@ -191,6 +195,22 @@ class TaskEditViewModelImpl @Inject constructor(
         _taskState.update {
             it.copy(
                 deadlineTime = null
+            )
+        }
+    }
+
+    override fun updateTaskMemo(memo: String) {
+        _taskState.update {
+            it.copy(
+                memo = memo
+            )
+        }
+    }
+
+    override fun clearTaskMemo() {
+        _taskState.update {
+            it.copy(
+                memo = ""
             )
         }
     }
