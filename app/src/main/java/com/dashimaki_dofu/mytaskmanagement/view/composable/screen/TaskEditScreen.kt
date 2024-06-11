@@ -1,6 +1,8 @@
 package com.dashimaki_dofu.mytaskmanagement.view.composable.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,6 +86,7 @@ fun TaskEditScreen(
     val showDatePicker = viewModel.showDatePickerState.collectAsState().value
     val showTimePicker = viewModel.showTimePickerState.collectAsState().value
     val showSaveErrorDialog = viewModel.showAlertDialogState.collectAsState().value
+    val showSelectTaskColorDialog = viewModel.showSelectTaskColorDialogState.collectAsState().value
 
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = Instant.now()
@@ -132,6 +136,15 @@ fun TaskEditScreen(
                         }
                     },
                     actions = {
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .background(task.taskColor.color)
+                                .border(width = 1.dp, color = Color.Black)
+                                .clickable {
+                                    viewModel.showSelectTaskColorDialog()
+                                }
+                        )
                         TextButton(
                             onClick = {
                                 if (!task.isTitleValid ||
@@ -363,6 +376,21 @@ fun TaskEditScreen(
                                     }
                                 },
                                 dismissButton = null
+                            )
+                        }
+                        //endregion
+
+                        //region TaskSelectColorDialog
+                        if (showSelectTaskColorDialog) {
+                            TaskSelectColorDialog(
+                                onDismiss = {
+                                    viewModel.dismissSelectTaskColorDialog()
+                                },
+                                currentTaskColor = task.taskColor,
+                                onItemClick = {
+                                    viewModel.dismissSelectTaskColorDialog()
+                                    viewModel.updateTaskColor(it)
+                                }
                             )
                         }
                         //endregion

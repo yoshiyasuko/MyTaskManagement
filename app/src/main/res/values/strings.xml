@@ -38,4 +38,5 @@
     <string name="taskEdit.saveTaskErrorDialog.taskDeadlineDateNotValid">締切日を入力してください</string>
     <string name="taskEdit.saveTaskErrorDialog.subTaskTitleNotValid">子課題%dのタイトルが入力されていません</string>
     <string name="taskEdit.subTask.title">子課題%d</string>
+    <string name="taskEdit.selectColorDialog.title">課題の背景色を選択してください</string>
 </resources>
