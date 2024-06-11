@@ -9,6 +9,7 @@ import com.dashimaki_dofu.mytaskmanagement.model.SubTask
 import com.dashimaki_dofu.mytaskmanagement.model.SubTaskStatus
 import com.dashimaki_dofu.mytaskmanagement.model.Task
 import com.dashimaki_dofu.mytaskmanagement.repository.TaskSubjectRepository
+import com.dashimaki_dofu.mytaskmanagement.ui.theme.TaskColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +37,7 @@ abstract class TaskEditViewModel : ViewModel() {
         data class TaskState(
             var id: Int = defaultId,
             var title: String = "",
+            var taskColor: TaskColor = TaskColor.YELLOW,
             var deadlineDate: Instant? = null,
             var deadlineTime: LocalTime? = null,
             var isTitleValid: Boolean = false,
@@ -44,6 +46,7 @@ abstract class TaskEditViewModel : ViewModel() {
             constructor(task: Task) : this() {
                 id = task.id
                 title = task.title
+                taskColor = task.color
                 deadlineDate = task.deadlineDate
                 deadlineTime = task.deadlineTime
                 isTitleValid = task.title.isNotEmpty()
@@ -97,11 +100,13 @@ abstract class TaskEditViewModel : ViewModel() {
     open val showDatePickerState: StateFlow<Boolean> = MutableStateFlow(false)
     open val showTimePickerState: StateFlow<Boolean> = MutableStateFlow(false)
     open val showAlertDialogState: StateFlow<Boolean> = MutableStateFlow(false)
+    open val showSelectTaskColorDialogState: StateFlow<Boolean> = MutableStateFlow(false)
     //endregion
 
     //region functions
     open fun loadTaskSubject(taskId: Int?) = Unit
     open fun updateTaskTitle(title: String) = Unit
+    open fun updateTaskColor(taskColor: TaskColor) = Unit
     open fun updateTaskDeadline(dateMillis: Long?) = Unit
     open fun updateTaskDeadlineTime(hour: Int, minute: Int) = Unit
     open fun clearTaskDeadlineTime() = Unit
@@ -117,6 +122,8 @@ abstract class TaskEditViewModel : ViewModel() {
     open fun dismissTimePicker() = Unit
     open fun showAlertDialog() = Unit
     open fun dismissAlertDialog() = Unit
+    open fun showSelectTaskColorDialog() = Unit
+    open fun dismissSelectTaskColorDialog() = Unit
     //endregion
 }
 //endregion
@@ -142,6 +149,9 @@ class TaskEditViewModelImpl @Inject constructor(
 
     private val _showAlertDialogState = MutableStateFlow(false)
     override val showAlertDialogState = _showAlertDialogState.asStateFlow()
+
+    private val _showSelectTaskColorDialogState = MutableStateFlow(false)
+    override val showSelectTaskColorDialogState = _showSelectTaskColorDialogState.asStateFlow()
     //endregion
 
     //region methods
@@ -163,6 +173,14 @@ class TaskEditViewModelImpl @Inject constructor(
             it.copy(
                 title = title,
                 isTitleValid = title.isNotEmpty()
+            )
+        }
+    }
+
+    override fun updateTaskColor(taskColor: TaskColor) {
+        _taskState.update {
+            it.copy(
+                taskColor = taskColor
             )
         }
     }
@@ -201,6 +219,7 @@ class TaskEditViewModelImpl @Inject constructor(
             val task = Task()
             task.id = _taskState.value.id
             task.title = _taskState.value.title
+            task.colorValue = _taskState.value.taskColor.code
             task.deadlineDate = _taskState.value.deadlineDate
             task.deadlineTime = _taskState.value.deadlineTime
 
@@ -273,6 +292,10 @@ class TaskEditViewModelImpl @Inject constructor(
         _showAlertDialogState.value = true
     }
 
+    override fun showSelectTaskColorDialog() {
+        _showSelectTaskColorDialogState.value = true
+    }
+
     override fun dismissDatePicker() {
         _showDatePickerState.value = false
     }
@@ -283,6 +306,10 @@ class TaskEditViewModelImpl @Inject constructor(
 
     override fun dismissAlertDialog() {
         _showAlertDialogState.value = false
+    }
+
+    override fun dismissSelectTaskColorDialog() {
+        _showSelectTaskColorDialogState.value = false
     }
     //endregion
 }

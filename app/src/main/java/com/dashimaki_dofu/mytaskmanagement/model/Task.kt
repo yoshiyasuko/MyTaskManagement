@@ -52,6 +52,10 @@ data class Task(
             return Color(colorValue)
         }
 
+    // 課題の色をEnumで取得
+    val color: TaskColor
+        get() = TaskColor.of(colorValue)
+
     // 課題リスト上タイトルのフォントカラー
     val listTitleColor: Color
         get() {

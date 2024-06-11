@@ -13,8 +13,17 @@ enum class TaskColor(val code: Long) {
     YELLOW(0xfff8dc6c),
     RED(0xfff86e6c),
     BLUE(0xff6cbef8),
-    LIGHT_GREEN(0xff149a48),
     LIGHT_GRAY(0xff1c1d1d);
+    LIGHT_GREEN(0xff149a48);
+
+    companion object {
+        fun of(code: Long): TaskColor {
+            TaskColor.entries.forEach {
+                if (it.code == code) return it
+            }
+            return YELLOW
+        }
+    }
 
     val color: Color = Color(code)
 }
