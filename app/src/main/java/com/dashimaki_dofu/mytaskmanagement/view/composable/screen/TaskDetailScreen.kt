@@ -202,7 +202,7 @@ fun TaskDetailScreen(
                                     shape = RoundedCornerShape(8.dp)
                                 )
                                 .background(
-                                    taskSubject.task.color
+                                    taskSubject.task.composableColor
                                         .copy(alpha = 0.3f)
                                         .compositeOver(Color.White)
                                 )
@@ -238,7 +238,7 @@ fun TaskDetailScreen(
                                             .clip(RoundedCornerShape(12.dp))
                                             .border(
                                                 width = 4.dp,
-                                                color = taskSubject.task.color,
+                                                color = taskSubject.task.composableColor,
                                                 shape = RoundedCornerShape(12.dp)
                                             )
                                             .fillMaxWidth()
@@ -247,7 +247,7 @@ fun TaskDetailScreen(
                                             modifier = Modifier
                                                 .fillMaxWidth(taskSubject.progressRate)
                                                 .fillMaxHeight()
-                                                .background(color = taskSubject.task.color)
+                                                .background(color = taskSubject.task.composableColor)
                                         )
                                         Text(
                                             text = taskSubject.progressRateString,

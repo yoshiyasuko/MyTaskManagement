@@ -51,7 +51,7 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
                 shape = RoundedCornerShape(8.dp)
             )
             .background(
-                taskSubject.task.color
+                taskSubject.task.composableColor
                     .copy(alpha = 0.3f)
                     .compositeOver(Color.White)
             )
@@ -60,7 +60,7 @@ fun TaskListItem(taskSubject: TaskSubject, onClick: (id: Int) -> Unit) {
         Box(
             modifier = Modifier
                 .fillMaxHeight()
-                .background(taskSubject.task.color)
+                .background(taskSubject.task.composableColor)
                 .fillMaxWidth(taskSubject.progressRate)
         )
         //endregion
