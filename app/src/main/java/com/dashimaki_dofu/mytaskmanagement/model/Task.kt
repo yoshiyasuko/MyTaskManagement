@@ -46,8 +46,8 @@ data class Task(
             return formattedDeadLineString + deadlineTimeString
         }
 
-    // 課題のベースカラー
-    val color: Color
+    // 課題の色をColorクラスで取得
+    val composableColor: Color
         get() {
             return Color(colorValue)
         }
@@ -56,7 +56,7 @@ data class Task(
     val listTitleColor: Color
         get() {
             // 明るさを暗くする
-            val argb = color.toArgb()
+            val argb = composableColor.toArgb()
             val hsl = FloatArray(3) { 0f }
             ColorUtils.RGBToHSL(
                 argb.red,
